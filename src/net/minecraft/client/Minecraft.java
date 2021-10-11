@@ -185,6 +185,7 @@ import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 import xyz.fraction.Fraction;
+import xyz.fraction.ui.HUD;
 
 public class Minecraft implements IThreadListener, IPlayerUsage
 {
@@ -524,7 +525,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
             {
                 try
                 {
-                    return String.format(str, new Object[] {GameSettings.getKeyDisplayString(Minecraft.this.gameSettings.keyBindUseItem.getKeyCode())});
+                    return String.format(str, new Object[] {GameSettings.getKeyDisplayString(Minecraft.this.gameSettings.keyBindInventory.getKeyCode())});
                 }
                 catch (Exception exception)
                 {
@@ -567,7 +568,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
         GlStateManager.viewport(0, 0, this.displayWidth, this.displayHeight);
         this.effectRenderer = new EffectRenderer(this.theWorld, this.renderEngine);
         this.checkGLError("Post startup");
-        this.ingameGUI = new GuiIngame(this);
+        this.ingameGUI = new HUD(this);
         Fraction.INSTANCE.start();
 
         if (this.serverName != null)
@@ -1946,6 +1947,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                     }
                     else
                     {
+                        Fraction.INSTANCE.getEventHandler().onKey(k);
+
                         if (k == 1)
                         {
                             this.displayInGameMenu();
@@ -2092,7 +2095,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
             boolean flag = this.gameSettings.chatVisibility != EntityPlayer.EnumChatVisibility.HIDDEN;
 
-            while (this.gameSettings.keyBindUseItem.isPressed())
+            while (this.gameSettings.keyBindInventory.isPressed())
             {
                 if (this.playerController.isRidingHorse())
                 {
@@ -2105,7 +2108,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                 }
             }
 
-            while (this.gameSettings.keyBindAttack.isPressed())
+            while (this.gameSettings.keyBindDrop.isPressed())
             {
                 if (!this.thePlayer.isSpectator())
                 {
@@ -2125,50 +2128,50 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
             if (this.thePlayer.isUsingItem())
             {
-                if (!this.gameSettings.keyBindDrop.isKeyDown())
+                if (!this.gameSettings.keyBindUse.isKeyDown())
                 {
                     this.playerController.onStoppedUsingItem(this.thePlayer);
                 }
 
-                while (this.gameSettings.keyBindPickBlock.isPressed())
+                while (this.gameSettings.keyBindAttack.isPressed())
                 {
                     ;
                 }
 
-                while (this.gameSettings.keyBindDrop.isPressed())
+                while (this.gameSettings.keyBindUse.isPressed())
                 {
                     ;
                 }
 
-                while (this.gameSettings.keyBindChat.isPressed())
+                while (this.gameSettings.keyBindPickItem.isPressed())
                 {
                     ;
                 }
             }
             else
             {
-                while (this.gameSettings.keyBindPickBlock.isPressed())
+                while (this.gameSettings.keyBindAttack.isPressed())
                 {
                     this.clickMouse();
                 }
 
-                while (this.gameSettings.keyBindDrop.isPressed())
+                while (this.gameSettings.keyBindUse.isPressed())
                 {
                     this.rightClickMouse();
                 }
 
-                while (this.gameSettings.keyBindChat.isPressed())
+                while (this.gameSettings.keyBindPickItem.isPressed())
                 {
                     this.middleClickMouse();
                 }
             }
 
-            if (this.gameSettings.keyBindDrop.isKeyDown() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem())
+            if (this.gameSettings.keyBindUse.isKeyDown() && this.rightClickDelayTimer == 0 && !this.thePlayer.isUsingItem())
             {
                 this.rightClickMouse();
             }
 
-            this.sendClickBlockToController(this.currentScreen == null && this.gameSettings.keyBindPickBlock.isKeyDown() && this.inGameHasFocus);
+            this.sendClickBlockToController(this.currentScreen == null && this.gameSettings.keyBindAttack.isKeyDown() && this.inGameHasFocus);
         }
 
         if (this.theWorld != null)

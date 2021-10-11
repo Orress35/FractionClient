@@ -42,15 +42,12 @@ import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MovementInput;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
+import org.lwjgl.input.Keyboard;
+import xyz.fraction.Fraction;
+import xyz.fraction.event.impl.PreMotionEvent;
 
 public class EntityPlayerSP extends AbstractClientPlayer
 {
@@ -169,6 +166,8 @@ public class EntityPlayerSP extends AbstractClientPlayer
     {
         if (this.worldObj.isBlockLoaded(new BlockPos(this.posX, 0.0D, this.posZ)))
         {
+            Fraction.INSTANCE.getEventHandler().onUpdate();
+
             super.onUpdate();
 
             if (this.isRiding())
@@ -180,6 +179,8 @@ public class EntityPlayerSP extends AbstractClientPlayer
             {
                 this.onUpdateWalkingPlayer();
             }
+
+            Fraction.INSTANCE.getEventHandler().onPost();
         }
     }
 
@@ -188,7 +189,9 @@ public class EntityPlayerSP extends AbstractClientPlayer
      */
     public void onUpdateWalkingPlayer()
     {
-        boolean flag = this.isSprinting();
+        PreMotionEvent e = new PreMotionEvent(posX, getEntityBoundingBox().minY, posZ, rotationYaw, rotationPitch, onGround, isSprinting(), isSneaking());
+        Fraction.INSTANCE.getEventHandler().onPre(e);
+        boolean flag = e.isSprinting();
 
         if (flag != this.serverSprintState)
         {
@@ -204,7 +207,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
             this.serverSprintState = flag;
         }
 
-        boolean flag1 = this.isSneaking();
+        boolean flag1 = e.isSneaking();
 
         if (flag1 != this.serverSneakState)
         {
@@ -222,11 +225,11 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
         if (this.isCurrentViewEntity())
         {
-            double d0 = this.posX - this.lastReportedPosX;
-            double d1 = this.getEntityBoundingBox().minY - this.lastReportedPosY;
-            double d2 = this.posZ - this.lastReportedPosZ;
-            double d3 = (double)(this.rotationYaw - this.lastReportedYaw);
-            double d4 = (double)(this.rotationPitch - this.lastReportedPitch);
+            double d0 = e.getX() - this.lastReportedPosX;
+            double d1 = e.getY() - this.lastReportedPosY;
+            double d2 = e.getZ() - this.lastReportedPosZ;
+            double d3 = e.getYaw() - this.lastReportedYaw;
+            double d4 = e.getPitch() - this.lastReportedPitch;
             boolean flag2 = d0 * d0 + d1 * d1 + d2 * d2 > 9.0E-4D || this.positionUpdateTicks >= 20;
             boolean flag3 = d3 != 0.0D || d4 != 0.0D;
 
@@ -234,24 +237,24 @@ public class EntityPlayerSP extends AbstractClientPlayer
             {
                 if (flag2 && flag3)
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.rotationYaw, this.rotationPitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(e.getX(), e.getY(), e.getZ(), e.getYaw(), e.getPitch(), e.isOnGround()));
                 }
                 else if (flag2)
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(e.getX(), e.getY(), e.getZ(), e.isOnGround()));
                 }
                 else if (flag3)
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(this.rotationYaw, this.rotationPitch, this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer.C05PacketPlayerLook(e.getYaw(), e.getPitch(), e.isOnGround()));
                 }
                 else
                 {
-                    this.sendQueue.addToSendQueue(new C03PacketPlayer(this.onGround));
+                    this.sendQueue.addToSendQueue(new C03PacketPlayer(e.isOnGround()));
                 }
             }
             else
             {
-                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, this.rotationYaw, this.rotationPitch, this.onGround));
+                this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(this.motionX, -999.0D, this.motionZ, e.getYaw(), e.getPitch(), e.isOnGround()));
                 flag2 = false;
             }
 
@@ -259,16 +262,16 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
             if (flag2)
             {
-                this.lastReportedPosX = this.posX;
-                this.lastReportedPosY = this.getEntityBoundingBox().minY;
-                this.lastReportedPosZ = this.posZ;
+                this.lastReportedPosX = e.getX();
+                this.lastReportedPosY = e.getY();
+                this.lastReportedPosZ = e.getZ();
                 this.positionUpdateTicks = 0;
             }
 
             if (flag3)
             {
-                this.lastReportedYaw = this.rotationYaw;
-                this.lastReportedPitch = this.rotationPitch;
+                this.lastReportedYaw = e.getYaw();
+                this.lastReportedPitch = e.getPitch();
             }
         }
     }
@@ -295,7 +298,21 @@ public class EntityPlayerSP extends AbstractClientPlayer
      */
     public void sendChatMessage(String message)
     {
-        this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
+        if (message.split(" ")[0].equals(".bind")) {
+            String[] args = message.split(" ");
+            if (args.length < 3) {
+                this.addChatMessage(new ChatComponentText(".bind module key"));
+                return;
+            }
+            String module = args[1];
+            String key = args[2].toUpperCase();
+            Fraction.INSTANCE.getModuleManager().getModuleByName(module).setKey(Keyboard.getKeyIndex(key));
+            this.addChatMessage(new ChatComponentText("Bound " + Fraction.INSTANCE.getModuleManager().getModuleByName(module).getName() + " to " + Keyboard.getKeyName(Keyboard.getKeyIndex(key))));
+        } else if (message.startsWith(".")) {
+            this.addChatMessage(new ChatComponentText(".bind"));
+        } else {
+            this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
+        }
     }
 
     /**
@@ -800,7 +817,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
         if (this.onGround && !flag1 && !flag2 && this.movementInput.moveForward >= f && !this.isSprinting() && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness))
         {
-            if (this.sprintToggleTimer <= 0 && !this.mc.gameSettings.keyBindInventory.isKeyDown())
+            if (this.sprintToggleTimer <= 0 && !this.mc.gameSettings.keyBindSprint.isKeyDown())
             {
                 this.sprintToggleTimer = 7;
             }
@@ -810,7 +827,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
             }
         }
 
-        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindInventory.isKeyDown())
+        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown())
         {
             this.setSprinting(true);
         }
