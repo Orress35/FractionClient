@@ -5,7 +5,6 @@ import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import xyz.fraction.Fraction;
 import xyz.fraction.module.Module;
-import xyz.fraction.util.ColorUtil;
 import xyz.fraction.util.font.FontRenderer;
 import xyz.fraction.util.font.Fonts;
 
@@ -40,7 +39,7 @@ public class HUD extends GuiIngame {
         for (Module module: modules) {
             fr.drawStringWithShadow(module.getDisplayName(), sr.getScaledWidth() - fr.getStringWidth(module.getDisplayName()) - 2, y, Color.HSBtoRGB((System.currentTimeMillis() + 125 * i) % 3250 / 3250F, 0.3F, 1.0F));
             i++;
-            y += 20;
+            y += 12;
         }
     }
 }

@@ -1239,8 +1239,8 @@ public abstract class Entity implements ICommandSender
             forward = forward * f;
             float f1 = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F);
             float f2 = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F);
-            this.motionX += (double)(strafe * f2 - forward * f1);
-            this.motionZ += (double)(forward * f2 + strafe * f1);
+            this.motionX += strafe * f2 - forward * f1;
+            this.motionZ += forward * f2 + strafe * f1;
         }
     }
 

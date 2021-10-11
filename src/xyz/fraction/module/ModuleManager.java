@@ -1,6 +1,7 @@
 package xyz.fraction.module;
 
 import xyz.fraction.module.movement.Fly;
+import xyz.fraction.module.movement.Speed;
 import xyz.fraction.module.movement.Sprint;
 import xyz.fraction.module.render.ClickGUI;
 
@@ -13,6 +14,7 @@ public class ModuleManager {
     public ModuleManager() {
         /* MOVEMENT */
         modules.add(new Fly());
+        modules.add(new Speed());
         modules.add(new Sprint());
         /* RENDER */
         modules.add(new ClickGUI());

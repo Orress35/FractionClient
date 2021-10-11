@@ -10,6 +10,11 @@ public class Sprint extends Module {
     private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {"Legit", "Basic"});
 
     @Override
+    public void onDisable() {
+        mc.gameSettings.keyBindSprint.setPressed(false);
+    }
+
+    @Override
     public void onPre(PreMotionEvent e) {
         setDisplayName(getName() + " &7[" + mode.get() + "]");
         if (mode.get().equals("Legit"))
