@@ -1,5 +1,6 @@
 package xyz.fraction.module;
 
+import xyz.fraction.module.combat.NoSwing;
 import xyz.fraction.module.movement.Fly;
 import xyz.fraction.module.movement.Speed;
 import xyz.fraction.module.movement.Sprint;
@@ -12,6 +13,8 @@ public class ModuleManager {
     private final List<Module> modules = new ArrayList<>();
 
     public ModuleManager() {
+        /* COMBAT */
+        modules.add(new NoSwing());
         /* MOVEMENT */
         modules.add(new Fly());
         modules.add(new Speed());
@@ -24,7 +27,7 @@ public class ModuleManager {
         return modules;
     }
 
-    public Module getModuleByName(String name) {
+    public Module getModule(String name) {
         for (Module module: modules) {
             if (module.getName().equalsIgnoreCase(name))
                 return module;
@@ -33,7 +36,16 @@ public class ModuleManager {
         return modules.get(0);
     }
 
-    public List<Module> getModulesByCategory(Category category) {
+    public Module getModule(Class<?> clazz) {
+        for (Module module: modules) {
+            if (module.getClass().getSimpleName().equals(clazz.getSimpleName()))
+                return module;
+        }
+
+        return modules.get(0);
+    }
+
+    public List<Module> getCategory(Category category) {
         List<Module> modules = new ArrayList<>();
 
         for (Module module: getModules()) {

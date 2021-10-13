@@ -48,6 +48,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
+import xyz.fraction.Fraction;
+import xyz.fraction.event.impl.PacketEvent;
 
 public class NetworkManager extends SimpleChannelInboundHandler<Packet>
 {
@@ -146,18 +148,16 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
         this.closeChannel(chatcomponenttranslation);
     }
 
-    protected void channelRead0(ChannelHandlerContext p_channelRead0_1_, Packet p_channelRead0_2_) throws Exception
-    {
-        if (this.channel.isOpen())
-        {
-            try
-            {
+    protected void channelRead0(ChannelHandlerContext p_channelRead0_1_, Packet p_channelRead0_2_) {
+        if (this.channel.isOpen()) {
+            try {
+                PacketEvent e = new PacketEvent(p_channelRead0_2_);
+                if (e.isCancelled())
+                    return;
+                Fraction.INSTANCE.getEventHandler().onReceive(e);
+
                 p_channelRead0_2_.processPacket(this.packetListener);
-            }
-            catch (ThreadQuickExitException var4)
-            {
-                ;
-            }
+            } catch (ThreadQuickExitException ignored) { }
         }
     }
 
@@ -167,39 +167,51 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
      */
     public void setNetHandler(INetHandler handler)
     {
-        Validate.notNull(handler, "packetListener", new Object[0]);
-        logger.debug("Set listener of {} to {}", new Object[] {this, handler});
+        Validate.notNull(handler, "packetListener");
+        logger.debug("Set listener of {} to {}", this, handler);
         this.packetListener = handler;
     }
 
-    public void sendPacket(Packet packetIn)
-    {
-        if (this.isChannelOpen())
-        {
+    public void sendPacket(Packet<?> packetIn) {
+        PacketEvent e = new PacketEvent(packetIn);
+        Fraction.INSTANCE.getEventHandler().onSend(e);
+        if (e.isCancelled())
+            return;
+        if (this.isChannelOpen()) {
             this.flushOutboundQueue();
-            this.dispatchPacket(packetIn, (GenericFutureListener <? extends Future <? super Void >> [])null);
-        }
-        else
-        {
+            this.dispatchPacket(packetIn, null);
+        } else {
             this.readWriteLock.writeLock().lock();
 
-            try
-            {
+            try {
                 this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[])null));
-            }
-            finally
-            {
+            } finally {
                 this.readWriteLock.writeLock().unlock();
             }
         }
     }
 
-    public void sendPacket(Packet packetIn, GenericFutureListener <? extends Future <? super Void >> listener, GenericFutureListener <? extends Future <? super Void >> ... listeners)
+    public void sendPacketSilent(Packet<?> packetIn) {
+        if (this.isChannelOpen()) {
+            this.flushOutboundQueue();
+            this.dispatchPacket(packetIn, null);
+        } else {
+            this.readWriteLock.writeLock().lock();
+
+            try {
+                this.outboundPacketsQueue.add(new NetworkManager.InboundHandlerTuplePacketListener(packetIn, (GenericFutureListener[])null));
+            } finally {
+                this.readWriteLock.writeLock().unlock();
+            }
+        }
+    }
+
+    public void sendPacket(Packet<?> packetIn, GenericFutureListener <? extends Future <? super Void >> listener, GenericFutureListener <? extends Future <? super Void >> ... listeners)
     {
         if (this.isChannelOpen())
         {
             this.flushOutboundQueue();
-            this.dispatchPacket(packetIn, (GenericFutureListener[])ArrayUtils.add(listeners, 0, listener));
+            this.dispatchPacket(packetIn, ArrayUtils.add(listeners, 0, listener));
         }
         else
         {

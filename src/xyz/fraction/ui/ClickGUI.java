@@ -39,7 +39,7 @@ public class ClickGUI extends GuiScreen {
     public void renderPanel(Category category) {
         panelX += 120;
 
-        List<Module> modules = Fraction.INSTANCE.getModuleManager().getModulesByCategory(category);
+        List<Module> modules = Fraction.INSTANCE.getModuleManager().getCategory(category);
 
         FontRenderer fr = Fonts.fractionNormal;
 
@@ -176,7 +176,7 @@ public class ClickGUI extends GuiScreen {
     public void clickPanel(Category category, int mouseX, int mouseY, int mouseButton) {
         panelX += 120;
 
-        List<Module> modules = Fraction.INSTANCE.getModuleManager().getModulesByCategory(category);
+        List<Module> modules = Fraction.INSTANCE.getModuleManager().getCategory(category);
 
         int y = 40;
         for (Module module: modules) {

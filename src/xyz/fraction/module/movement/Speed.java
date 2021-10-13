@@ -16,6 +16,7 @@ public class Speed extends Module {
 
     @Override
     public void onPre(PreMotionEvent e) {
+        mc.thePlayer.swingItem();
         setDisplayName(getName() + " &7[" + mode.get() + "]");
         switch (mode.get()) {
             case "Vanilla":

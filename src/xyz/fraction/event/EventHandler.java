@@ -1,6 +1,7 @@
 package xyz.fraction.event;
 
 import xyz.fraction.Fraction;
+import xyz.fraction.event.impl.PacketEvent;
 import xyz.fraction.event.impl.PreMotionEvent;
 import xyz.fraction.module.Module;
 
@@ -29,5 +30,15 @@ public class EventHandler {
     public void onKey(int key) {
         for (Module module: Fraction.INSTANCE.getModuleManager().getModules())
             module.onKey(key);
+    }
+
+    public void onSend(PacketEvent e) {
+        for (Module module: Fraction.INSTANCE.getModuleManager().getModules())
+            module.onSend(e);
+    }
+
+    public void onReceive(PacketEvent e) {
+        for (Module module: Fraction.INSTANCE.getModuleManager().getModules())
+            module.onReceive(e);
     }
 }

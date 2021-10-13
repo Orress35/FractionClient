@@ -185,6 +185,7 @@ import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 import xyz.fraction.Fraction;
+import xyz.fraction.module.combat.NoSwing;
 import xyz.fraction.ui.HUD;
 
 public class Minecraft implements IThreadListener, IPlayerUsage
@@ -1513,7 +1514,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                 if (this.theWorld.getBlockState(blockpos).getBlock().getMaterial() != Material.air && this.playerController.onPlayerDamageBlock(blockpos, this.objectMouseOver.sideHit))
                 {
                     this.effectRenderer.addBlockHitEffects(blockpos, this.objectMouseOver.sideHit);
-                    this.thePlayer.swingItem();
+
+                    NoSwing noSwing = (NoSwing) Fraction.INSTANCE.getModuleManager().getModule(NoSwing.class);
+                    if (!noSwing.getBreaking() || !noSwing.isEnabled())
+                        this.thePlayer.swingItem();
                 }
             }
             else
@@ -1527,11 +1531,13 @@ public class Minecraft implements IThreadListener, IPlayerUsage
     {
         if (this.leftClickCounter <= 0)
         {
-            this.thePlayer.swingItem();
+            NoSwing noSwing = (NoSwing) Fraction.INSTANCE.getModuleManager().getModule(NoSwing.class);
+            if (!noSwing.getHitting() || !noSwing.isEnabled())
+                this.thePlayer.swingItem();
 
             if (this.objectMouseOver == null)
             {
-                logger.error("Null returned as \'hitResult\', this shouldn\'t happen!");
+                logger.error("Null returned as 'hitResult', this shouldn't happen!");
 
                 if (this.playerController.isNotCreative())
                 {
@@ -1581,7 +1587,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage
 
             if (this.objectMouseOver == null)
             {
-                logger.warn("Null returned as \'hitResult\', this shouldn\'t happen!");
+                logger.warn("Null returned as 'hitResult', this shouldn't happen!");
             }
             else
             {
@@ -1609,7 +1615,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                             if (this.playerController.onPlayerRightClick(this.thePlayer, this.theWorld, itemstack, blockpos, this.objectMouseOver.sideHit, this.objectMouseOver.hitVec))
                             {
                                 flag = false;
-                                this.thePlayer.swingItem();
+                                NoSwing noSwing = (NoSwing) Fraction.INSTANCE.getModuleManager().getModule(NoSwing.class);
+                                if (!noSwing.getPlacing() || !noSwing.isEnabled())
+                                    this.thePlayer.swingItem();
                             }
 
                             if (itemstack == null)

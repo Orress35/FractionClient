@@ -306,8 +306,8 @@ public class EntityPlayerSP extends AbstractClientPlayer
             }
             String module = args[1];
             String key = args[2].toUpperCase();
-            Fraction.INSTANCE.getModuleManager().getModuleByName(module).setKey(Keyboard.getKeyIndex(key));
-            this.addChatMessage(new ChatComponentText("Bound " + Fraction.INSTANCE.getModuleManager().getModuleByName(module).getName() + " to " + Keyboard.getKeyName(Keyboard.getKeyIndex(key))));
+            Fraction.INSTANCE.getModuleManager().getModule(module).setKey(Keyboard.getKeyIndex(key));
+            this.addChatMessage(new ChatComponentText("Bound " + Fraction.INSTANCE.getModuleManager().getModule(module).getName() + " to " + Keyboard.getKeyName(Keyboard.getKeyIndex(key))));
         } else if (message.startsWith(".")) {
             this.addChatMessage(new ChatComponentText(".bind"));
         } else {
