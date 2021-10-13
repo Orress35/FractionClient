@@ -25,8 +25,9 @@ public enum Fraction {
     private final EventHandler eventHandler = new EventHandler();
     private final ModuleManager moduleManager = new ModuleManager();
 
-    private final String CLIENT_FOLDER = Minecraft.getMinecraft().mcDataDir.getAbsolutePath().substring(0, Minecraft.getMinecraft().mcDataDir.getAbsolutePath().length() - 1) + "Fraction/";
-    private final String CLIENT_SETTINGS = CLIENT_FOLDER + "settings.txt";
+    public static final String CLIENT_FOLDER = Minecraft.getMinecraft().mcDataDir.getAbsolutePath().substring(0, Minecraft.getMinecraft().mcDataDir.getAbsolutePath().length() - 1) + "Fraction/";
+    public static final String CLIENT_SETTINGS = CLIENT_FOLDER + "settings.txt";
+    public static final String CLIENT_ALTS = CLIENT_FOLDER + "alts.txt";
 
     public void start() {
         File dir = new File(CLIENT_FOLDER);
