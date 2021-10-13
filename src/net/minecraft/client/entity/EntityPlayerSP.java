@@ -48,6 +48,7 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 import xyz.fraction.Fraction;
 import xyz.fraction.event.impl.PreMotionEvent;
+import xyz.fraction.module.movement.NoSlow;
 
 public class EntityPlayerSP extends AbstractClientPlayer
 {
@@ -235,7 +236,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
             if (this.ridingEntity == null)
             {
-                if (flag2 && flag3)
+                if ((flag2 && flag3) || e.isPosLook())
                 {
                     this.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(e.getX(), e.getY(), e.getZ(), e.getYaw(), e.getPitch(), e.isOnGround()));
                 }
@@ -804,9 +805,17 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
         if (this.isUsingItem() && !this.isRiding())
         {
-            this.movementInput.moveStrafe *= 0.2F;
-            this.movementInput.moveForward *= 0.2F;
-            this.sprintToggleTimer = 0;
+            NoSlow noSlow = new NoSlow();
+            if (noSlow.isEnabled()) {
+                this.movementInput.moveStrafe *= noSlow.getMultiplier();
+                this.movementInput.moveForward *= noSlow.getMultiplier();
+                if (!noSlow.canSprint())
+                    this.sprintToggleTimer = 0;
+            } else {
+                this.movementInput.moveStrafe *= 0.2F;
+                this.movementInput.moveForward *= 0.2F;
+                this.sprintToggleTimer = 0;
+            }
         }
 
         this.pushOutOfBlocks(this.posX - (double)this.width * 0.35D, this.getEntityBoundingBox().minY + 0.5D, this.posZ + (double)this.width * 0.35D);

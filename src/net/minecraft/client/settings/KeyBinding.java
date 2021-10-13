@@ -115,6 +115,14 @@ public class KeyBinding implements Comparable<KeyBinding>
         this.pressed = pressed;
     }
 
+    public int getPressTime() {
+        return pressTime;
+    }
+
+    public void setPressTime(int pressTime) {
+        this.pressTime = pressTime;
+    }
+
     private void unpressKey()
     {
         this.pressTime = 0;

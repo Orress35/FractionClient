@@ -5,7 +5,7 @@ import xyz.fraction.event.Event;
 public class PreMotionEvent extends Event {
     private double x, y, z;
     private float yaw, pitch;
-    private boolean onGround, sprinting, sneaking;
+    private boolean onGround, sprinting, sneaking, posLook;
 
     public PreMotionEvent(double x, double y, double z, float yaw, float pitch, boolean onGround, boolean sprinting, boolean sneaking) {
         this.x = x;
@@ -16,6 +16,7 @@ public class PreMotionEvent extends Event {
         this.onGround = onGround;
         this.sprinting = sprinting;
         this.sneaking = sneaking;
+        this.posLook = false;
     }
 
     public double getX() {
@@ -80,5 +81,13 @@ public class PreMotionEvent extends Event {
 
     public void setSprinting(boolean sprinting) {
         this.sprinting = sprinting;
+    }
+
+    public boolean isPosLook() {
+        return posLook;
+    }
+
+    public void setPosLook(boolean posLook) {
+        this.posLook = posLook;
     }
 }

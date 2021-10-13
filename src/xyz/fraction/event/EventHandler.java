@@ -21,6 +21,13 @@ public class EventHandler {
         }
     }
 
+    public void onRender() {
+        for (Module module: Fraction.INSTANCE.getModuleManager().getModules()) {
+            if (module.isEnabled())
+                module.onRender();
+        }
+    }
+
     public void onPost() {
         for (Module module: Fraction.INSTANCE.getModuleManager().getModules()) {
             if (module.isEnabled())

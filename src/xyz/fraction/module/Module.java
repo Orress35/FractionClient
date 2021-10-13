@@ -96,6 +96,7 @@ public class Module {
     public void onSend(PacketEvent e) { }
     public void onReceive(PacketEvent e) { }
     public void onJump(JumpEvent e) { }
+    public void onRender() { }
 
     public void onKey(int key) {
         if (key == this.key)

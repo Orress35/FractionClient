@@ -2,10 +2,7 @@ package xyz.fraction.module;
 
 import xyz.fraction.module.combat.Aura;
 import xyz.fraction.module.combat.NoSwing;
-import xyz.fraction.module.movement.Fly;
-import xyz.fraction.module.movement.HighJump;
-import xyz.fraction.module.movement.Speed;
-import xyz.fraction.module.movement.Sprint;
+import xyz.fraction.module.movement.*;
 import xyz.fraction.module.other.AntiFalse;
 import xyz.fraction.module.other.Derp;
 import xyz.fraction.module.render.ClickGUI;
@@ -24,6 +21,7 @@ public class ModuleManager {
         /* MOVEMENT */
         modules.add(new Fly());
         modules.add(new HighJump());
+        modules.add(new NoSlow());
         modules.add(new Speed());
         modules.add(new Sprint());
 
