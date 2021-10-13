@@ -60,9 +60,13 @@ public enum Fraction {
                 if (!line.contains(":")) {
                     String name = line.split(",")[0];
                     int key = Integer.parseInt(line.split(",")[1]);
+                    boolean enabled = Boolean.parseBoolean(line.split(",")[2]);
 
                     if (name.equals(module.getName())) {
                         module.setKey(key);
+
+                        if (enabled)
+                            module.toggle();
                     }
                 } else {
                     String name = line.split(":")[0];
@@ -104,8 +108,9 @@ public enum Fraction {
             for (Module module: moduleManager.getModules()) {
                 String name = module.getName();
                 int key = module.getKey();
+                boolean enabled = module.isEnabled();
 
-                pw.println(name + "," + key);
+                pw.println(name + "," + key + "," + enabled);
 
                 for (Setting s: module.getSettings()) {
                     String setting = s.getName();

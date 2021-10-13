@@ -2,6 +2,7 @@ package xyz.fraction.module;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
+import xyz.fraction.event.impl.JumpEvent;
 import xyz.fraction.event.impl.PacketEvent;
 import xyz.fraction.event.impl.PreMotionEvent;
 import xyz.fraction.setting.Setting;
@@ -94,6 +95,7 @@ public class Module {
     public void onUpdate() { }
     public void onSend(PacketEvent e) { }
     public void onReceive(PacketEvent e) { }
+    public void onJump(JumpEvent e) { }
 
     public void onKey(int key) {
         if (key == this.key)

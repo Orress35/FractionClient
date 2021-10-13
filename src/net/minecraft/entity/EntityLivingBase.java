@@ -12,6 +12,7 @@ import java.util.UUID;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
@@ -50,6 +51,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import xyz.fraction.Fraction;
+import xyz.fraction.event.impl.JumpEvent;
+import xyz.fraction.module.movement.HighJump;
 
 public abstract class EntityLivingBase extends Entity
 {
@@ -1564,23 +1568,46 @@ public abstract class EntityLivingBase extends Entity
     /**
      * Causes this entity to do an upwards motion (jumping).
      */
-    protected void jump()
-    {
-        this.motionY = (double)this.getJumpUpwardsMotion();
+    protected void jump() {
+        if (this == Minecraft.getMinecraft().thePlayer) {
+            JumpEvent e = new JumpEvent(getJumpUpwardsMotion());
+            Fraction.INSTANCE.getEventHandler().onJump(e);
+
+            if (e.isCancelled())
+                return;
+
+            motionY = e.getMotion();
+        } else {
+            motionY = getJumpUpwardsMotion();
+        }
 
         if (this.isPotionActive(Potion.jump))
-        {
-            this.motionY += (double)((float)(this.getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F);
-        }
+            motionY += (float)(getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F;
 
         if (this.isSprinting())
         {
             float f = this.rotationYaw * 0.017453292F;
-            this.motionX -= (double)(MathHelper.sin(f) * 0.2F);
-            this.motionZ += (double)(MathHelper.cos(f) * 0.2F);
+            motionX -= MathHelper.sin(f) * 0.2F;
+            motionZ += MathHelper.cos(f) * 0.2F;
         }
 
-        this.isAirBorne = true;
+        isAirBorne = true;
+    }
+
+    protected void jumpNoEvent() {
+        motionY = getJumpUpwardsMotion();
+
+        if (this.isPotionActive(Potion.jump))
+            motionY += (float)(getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F;
+
+        if (this.isSprinting())
+        {
+            float f = this.rotationYaw * 0.017453292F;
+            motionX -= MathHelper.sin(f) * 0.2F;
+            motionZ += MathHelper.cos(f) * 0.2F;
+        }
+
+        isAirBorne = true;
     }
 
     /**

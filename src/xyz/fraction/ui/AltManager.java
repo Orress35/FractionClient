@@ -48,14 +48,14 @@ public class AltManager extends GuiScreen {
     public void drawScreen(int x2, int y2, float z2) {
         drawDefaultBackground();
 
-        drawCenteredString(mc.fontRendererObj, status, width / 2, height - 30, ColorUtil.getColor(255, 200, 200, 200));
+        drawCenteredString(mc.fontRendererObj, status, width / 2, height - 30, ColorUtil.getColor(255, 255, 255, 255));
 
         input.drawTextBox();
 
         int x = 20;
         int y = 20;
         for (Alt alt: alts) {
-            drawString(mc.fontRendererObj, alt.getName(), x, y, ColorUtil.getColor(255, 200, 200, 200));
+            drawString(mc.fontRendererObj, alt.getName(), x, y, ColorUtil.getColor(255, 255, 255, 255));
             y += 20;
         }
 
@@ -86,8 +86,9 @@ public class AltManager extends GuiScreen {
                     mc.session = alt.login();
                 } else {
                     alts.remove(alt);
-                    break;
                 }
+
+                break;
             }
 
             y += 20;

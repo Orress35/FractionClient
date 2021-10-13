@@ -1,6 +1,7 @@
 package xyz.fraction.event;
 
 import xyz.fraction.Fraction;
+import xyz.fraction.event.impl.JumpEvent;
 import xyz.fraction.event.impl.PacketEvent;
 import xyz.fraction.event.impl.PreMotionEvent;
 import xyz.fraction.module.Module;
@@ -10,6 +11,13 @@ public class EventHandler {
         for (Module module: Fraction.INSTANCE.getModuleManager().getModules()) {
             if (module.isEnabled())
                 module.onPre(e);
+        }
+    }
+
+    public void onJump(JumpEvent e) {
+        for (Module module: Fraction.INSTANCE.getModuleManager().getModules()) {
+            if (module.isEnabled())
+                module.onJump(e);
         }
     }
 

@@ -52,7 +52,7 @@ public class ClickGUI extends GuiScreen {
             fr.drawCenteredStringWithShadow(module.getName(), (panelX - 8 + panelX + 78) / 2F, y + 5, module.isEnabled() ? ColorUtil.getColor(255, 120, 200, 120) : ColorUtil.getColor(255, 200, 200, 200));
 
             if (!module.getSettings().isEmpty())
-                fr.drawStringWithShadow("(...)", panelX + 60, y + 5, ColorUtil.getColor(255, 200, 200, 200));
+                fr.drawStringWithShadow("+", panelX + 70, y + 5, ColorUtil.getColor(255, 200, 200, 200));
 
             y += 20;
         }

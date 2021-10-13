@@ -1767,19 +1767,26 @@ public abstract class EntityPlayer extends EntityLivingBase
     /**
      * Causes this entity to do an upwards motion (jumping).
      */
-    public void jump()
-    {
+    public void jump() {
         super.jump();
+
         this.triggerAchievement(StatList.jumpStat);
 
         if (this.isSprinting())
-        {
             this.addExhaustion(0.8F);
-        }
         else
-        {
             this.addExhaustion(0.2F);
-        }
+    }
+
+    public void jumpNoEvent() {
+        super.jumpNoEvent();
+
+        this.triggerAchievement(StatList.jumpStat);
+
+        if (this.isSprinting())
+            this.addExhaustion(0.8F);
+        else
+            this.addExhaustion(0.2F);
     }
 
     /**
