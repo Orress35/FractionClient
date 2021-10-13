@@ -32,7 +32,7 @@ public class NoSlow extends Module {
         setDisplayName(getName() + " &7[" + mode.get() + "]");
         if (mc.thePlayer.isBlocking() && mode.get().equals("Packet")) {
             if (stopwatch.elapsedNoReset(packetTimer.get()))
-                block();
+                unblock();
         }
     }
 
@@ -41,7 +41,7 @@ public class NoSlow extends Module {
         setDisplayName(getName() + " &7[" + mode.get() + "]");
         if (mc.thePlayer.isBlocking() && mode.get().equals("Packet")) {
             if (stopwatch.elapsed(packetTimer.get()))
-                unblock();
+                block();
         }
     }
 

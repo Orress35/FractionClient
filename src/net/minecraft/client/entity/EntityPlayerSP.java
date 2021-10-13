@@ -805,7 +805,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
         if (this.isUsingItem() && !this.isRiding())
         {
-            NoSlow noSlow = new NoSlow();
+            NoSlow noSlow = (NoSlow) Fraction.INSTANCE.getModuleManager().getModule(NoSlow.class);
             if (noSlow.isEnabled()) {
                 this.movementInput.moveStrafe *= noSlow.getMultiplier();
                 this.movementInput.moveForward *= noSlow.getMultiplier();
@@ -836,7 +836,8 @@ public class EntityPlayerSP extends AbstractClientPlayer
             }
         }
 
-        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown())
+        NoSlow noSlow = (NoSlow) Fraction.INSTANCE.getModuleManager().getModule(NoSlow.class);
+        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && (!this.isUsingItem() || (noSlow.isEnabled() && noSlow.canSprint())) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown())
         {
             this.setSprinting(true);
         }
