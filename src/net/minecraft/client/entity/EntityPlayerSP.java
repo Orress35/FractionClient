@@ -302,15 +302,19 @@ public class EntityPlayerSP extends AbstractClientPlayer
         if (message.split(" ")[0].equals(".bind")) {
             String[] args = message.split(" ");
             if (args.length < 3) {
-                this.addChatMessage(new ChatComponentText(".bind module key"));
+                Fraction.INSTANCE.send(".bind <module> <key>");
                 return;
             }
             String module = args[1];
             String key = args[2].toUpperCase();
             Fraction.INSTANCE.getModuleManager().getModule(module).setKey(Keyboard.getKeyIndex(key));
-            this.addChatMessage(new ChatComponentText("Bound " + Fraction.INSTANCE.getModuleManager().getModule(module).getName() + " to " + Keyboard.getKeyName(Keyboard.getKeyIndex(key))));
+            Fraction.INSTANCE.send("bound &a" + Fraction.INSTANCE.getModuleManager().getModule(module).getName() + "&7 to &a" + Keyboard.getKeyName(Keyboard.getKeyIndex(key)));
+        } else if (message.split(" ")[0].equals(".config")) {
+            String[] args = message.split(" ");
+            Fraction.INSTANCE.config(args);
         } else if (message.startsWith(".")) {
-            this.addChatMessage(new ChatComponentText(".bind"));
+            Fraction.INSTANCE.send(".bind");
+            Fraction.INSTANCE.send(".config");
         } else {
             this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
         }

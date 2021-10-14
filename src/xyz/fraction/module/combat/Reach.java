@@ -10,10 +10,10 @@ public class Reach extends Module {
     private final DoubleSetting max = new DoubleSetting(this, "Max", 3.0, 6.0, 3.0);
 
     public double getReach() {
-        if (!isEnabled())
-            return 3.0D;
         if (min.get() > max.get())
             min.set(max.get());
+        if (!isEnabled())
+            return 3.0D;
         return Math.random() * (max.get() - min.get()) + min.get();
     }
 }
