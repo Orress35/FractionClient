@@ -5,13 +5,13 @@ import net.minecraft.client.Minecraft;
 public class Rotations {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
-    public static double gcd() {
-        double f = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
+    public static float gcd() {
+        float f = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
         return f * f * f * 1.2F;
     }
 
-    public static double gcd(int sensitivity) {
-        double f = sensitivity / 200F * 0.6F + 0.2F;
+    public static float gcd(int sensitivity) {
+        float f = sensitivity / 200F * 0.6F + 0.2F;
         return f * f * f * 1.2F;
     }
 

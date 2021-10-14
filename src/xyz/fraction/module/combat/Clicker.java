@@ -2,6 +2,7 @@ package xyz.fraction.module.combat;
 
 import net.minecraft.util.MovingObjectPosition;
 import org.lwjgl.input.Mouse;
+import xyz.fraction.event.impl.PacketEvent;
 import xyz.fraction.event.impl.PreMotionEvent;
 import xyz.fraction.module.Module;
 import xyz.fraction.module.ModuleInfo;
@@ -11,6 +12,16 @@ public class Clicker extends Module {
     private final int[] delays = new int[] {1,2,2,1,2,3,2,3,2,2,3,2,1,2,2,1,2,2,3,2,1,2,2,3,2,2,3,2,2,1,2,2,2,1,2,2,1,2,2,2,1,2,2,2,1,2,2,2,5,2,2,1,2,2,2,3,2,1,2,2,2,3,2,2,2,2,1,2,2,1,2,2,3,2,2,2,1,2,2,2,2,1,2,2,2,1,2,2,2,1,2,2,2,3,2,2,3,2,2,1,2,2,2,2,2,2,1,2,2,2,2,3,2,2,2,5,2,2,2,2,1,2,2,2,1,2,2,2,2,2,2,2,2,1,2,2,2,1,2,2,2,3,2,2,2,1,2,2,2,2,2,1,2,2,2,2,1,2,2,2,3,2,3,2,2,2,2,2,2,1,2,4,2,2,1,2,2,2,2,2,2,2,3,2,2,2,2,2,2,2,1,2,2,2,2,2,3,2,2,2,2,2,2,3,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,2,2,2,2,2,2,2,2,1,2,5,2,2,2};
     private int clickTicks = 0;
     private int index = 0;
+
+    @Override
+    public void onSend(PacketEvent e) {
+         /* code for getting click patterns
+        if (e.getPacket() instanceof C0APacketAnimation) {
+            System.out.print(clickTicks + ",");
+            clickTicks = 0;
+        }
+         */
+    }
 
     @Override
     public void onPre(PreMotionEvent e) {
@@ -30,7 +41,7 @@ public class Clicker extends Module {
 
             if (mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
                 mc.gameSettings.keyBindAttack.setPressTime(1);
-            } else {
+            } else if (!mc.thePlayer.isUsingItem()) {
                 mc.thePlayer.swingItem();
             }
         }

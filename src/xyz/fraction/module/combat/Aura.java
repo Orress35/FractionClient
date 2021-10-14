@@ -48,14 +48,12 @@ public class Aura extends Module {
     private int clickTicks = 0;
     private int index = 0;
 
+    float rotYaw, rotPitch, lastRotYaw, lastRotPitch;
+
     @Override
-    public void onSend(PacketEvent e) {
-         /* code for getting click patterns
-        if (e.getPacket() instanceof C0APacketAnimation) {
-            System.out.print(clickTicks + ",");
-            clickTicks = 0;
-        }
-         */
+    public void onEnable() {
+        if (mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && mc.objectMouseOver.entityHit instanceof EntityLivingBase)
+            target = (EntityLivingBase) mc.objectMouseOver.entityHit;
     }
 
     @Override
@@ -70,12 +68,91 @@ public class Aura extends Module {
         if (target == null)
             return;
 
-        float[] rotations = getRotations(target.posX, target.posY, target.posZ, target.getEyeHeight());
-        float perfectYaw = rotations[0];
-        float perfectPitch = rotations[1];
+        rotYaw = rotPitch = 0;
 
-        mc.thePlayer.rotationYaw += getYawRot(mc.thePlayer.rotationYaw, perfectYaw);
-        mc.thePlayer.rotationPitch += getPitchRot(mc.thePlayer.rotationPitch, perfectPitch);
+        float pRotYaw = Rotations.getYaw(mc.thePlayer.rotationYaw, getRotations(target.posX + 0.023, target.posY, target.posZ - 0.054, target.getEyeHeight())[0]);
+        float sRotYaw = Math.signum(pRotYaw);
+
+        if (Math.abs(pRotYaw) > 86) {
+            rotYaw = Math.max(Math.abs(pRotYaw), (float) Math.random() * 10 + 20) * sRotYaw;
+        } else if (Math.abs(pRotYaw) > 30) {
+            rotYaw = Math.max(Math.abs(pRotYaw), (float) Math.random() * 5 + 10) * sRotYaw;
+        } else if (Math.abs(pRotYaw) > 3) {
+            rotYaw = Math.max(Math.abs(pRotYaw), (float) Math.random() * 6F + 2F) * sRotYaw;
+        } else {
+            rotYaw = 0;
+        }
+
+        switch (yawGcdMode.get()) {
+            case "Value":
+                rotYaw -= rotYaw % yawGcd.get();
+                break;
+            case "Sensitivity":
+                rotYaw -= rotYaw % Rotations.gcd(yawSens.get());
+                break;
+            case "Legit":
+                rotYaw -= rotYaw % Rotations.gcd();
+                break;
+        }
+
+        mc.thePlayer.rotationYaw += rotYaw;
+
+        if (mc.objectMouseOver == null || mc.objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.ENTITY || mc.objectMouseOver.entityHit != target) {
+            double addY = 0;
+            if (Math.abs(getYawRot(mc.thePlayer.rotationYaw, getRotations(target.posX + 0.023, 0, target.posZ - 0.054, target.getEyeHeight())[0])) > 2) {
+                addY = Math.random() * 0.025;
+                if (Math.random() > 0.5)
+                    addY *= -1;
+            }
+
+            float pRotPitch = Rotations.getPitch(mc.thePlayer.rotationPitch, getRotations(target.posX + 0.023, target.posY + addY, target.posZ - 0.054, target.getEyeHeight())[1]);
+            float sRotPitch = Math.signum(pRotPitch);
+
+            if (Math.abs(pRotPitch) > 18) {
+                rotPitch = Math.max(Math.abs(pRotPitch), (float) Math.random() * 7F + 4F) * sRotPitch;
+            } else {
+                rotPitch = Math.max(Math.abs(pRotPitch), (float) Math.random() * 5F + 2F) * sRotPitch;
+            }
+
+            if (rotPitch == 0 && Math.abs(rotYaw) > 8 && Math.random() > 0.75) {
+                if (Math.random() > 0.5)
+                    rotPitch = (float) Math.random() * -0.25F;
+                else
+                    rotPitch = (float) Math.random() * 0.25F;
+            }
+
+            switch (pitchGcdMode.get()) {
+                case "Value":
+                    rotPitch -= rotPitch % pitchGcd.get();
+                    break;
+                case "Sensitivity":
+                    rotPitch -= rotPitch % Rotations.gcd(pitchSens.get());
+                    break;
+                case "Legit":
+                    rotPitch -= rotPitch % Rotations.gcd();
+                    break;
+            }
+
+            mc.thePlayer.rotationPitch += rotPitch;
+        } else {
+            double vecY = mc.objectMouseOver.hitVec.yCoord;
+
+            double diffY = vecY - target.posY - target.getEyeHeight();
+
+            if (diffY < -0.05)
+                mc.thePlayer.rotationPitch -= getPitchRot(mc.thePlayer.rotationPitch, mc.thePlayer.rotationPitch + (float) Math.random() * 3F);
+            else if (diffY > 0.05)
+                mc.thePlayer.rotationPitch += getPitchRot(mc.thePlayer.rotationPitch, mc.thePlayer.rotationPitch + (float) Math.random() * 3F);
+
+            if (Math.abs(rotYaw) > 3) {
+                if (Math.random() > 0.5)
+                    mc.thePlayer.rotationPitch -= getPitchRot(mc.thePlayer.rotationPitch, mc.thePlayer.rotationPitch + (float) Math.random() * 0.25F);
+                else
+                    mc.thePlayer.rotationPitch += getPitchRot(mc.thePlayer.rotationPitch, mc.thePlayer.rotationPitch + (float) Math.random() * 0.25F);
+            }
+        }
+
+        lastRotYaw = rotYaw;
 
         if (legitHits.get()) {
             click();

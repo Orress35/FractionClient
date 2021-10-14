@@ -1550,9 +1550,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                 switch (this.objectMouseOver.typeOfHit)
                 {
                     case ENTITY:
-                        double distance = this.thePlayer.getPositionEyes(1F).distanceTo(this.objectMouseOver.hitVec);
-                        if (distance > 3 && Fraction.INSTANCE.getModuleManager().getModule(ReachAlert.class).isEnabled())
-                            Fraction.INSTANCE.send("reach: &a" + distance);
                         this.playerController.attackEntity(this.thePlayer, this.objectMouseOver.entityHit);
                         break;
 
