@@ -16,7 +16,7 @@ public class Fly extends Module {
 
     @Override
     public void onPre(PreMotionEvent e) {
-        setDisplayName(getName() + " &7[" + mode.get() + "]");
+        setDisplayName(getName() + " &7" + mode.get());
         switch (mode.get()) {
             case "Vanilla":
                 mc.thePlayer.motionY = 0;

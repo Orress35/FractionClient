@@ -53,7 +53,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import xyz.fraction.Fraction;
 import xyz.fraction.event.impl.JumpEvent;
-import xyz.fraction.module.movement.HighJump;
+import xyz.fraction.module.movement.AirJump;
+import xyz.fraction.module.movement.FastLadder;
 
 public abstract class EntityLivingBase extends Entity
 {
@@ -1664,63 +1665,61 @@ public abstract class EntityLivingBase extends Entity
                     if (this.isOnLadder())
                     {
                         float f6 = 0.15F;
-                        this.motionX = MathHelper.clamp_double(this.motionX, (double)(-f6), (double)f6);
-                        this.motionZ = MathHelper.clamp_double(this.motionZ, (double)(-f6), (double)f6);
-                        this.fallDistance = 0.0F;
+                        motionX = MathHelper.clamp_double(this.motionX, -f6, f6);
+                        motionZ = MathHelper.clamp_double(this.motionZ, -f6, f6);
+                        fallDistance = 0.0F;
 
-                        if (this.motionY < -0.15D)
-                        {
-                            this.motionY = -0.15D;
+                        FastLadder fastLadder = (FastLadder) Fraction.INSTANCE.getModuleManager().getModule(FastLadder.class);
+                        if (fastLadder.isEnabled()) {
+                            if (motionY < -fastLadder.getDownSpeed())
+                                motionY = -fastLadder.getDownSpeed();
+                        } else if (motionY < -0.15D) {
+                            motionY = -0.15D;
                         }
 
                         boolean flag = this.isSneaking() && this instanceof EntityPlayer;
 
-                        if (flag && this.motionY < 0.0D)
+                        if (flag && motionY < 0.0D)
                         {
-                            this.motionY = 0.0D;
+                            motionY = 0.0D;
                         }
                     }
 
-                    this.moveEntity(this.motionX, this.motionY, this.motionZ);
+                    moveEntity(motionX, motionY, motionZ);
 
-                    if (this.isCollidedHorizontally && this.isOnLadder())
+                    if (isCollidedHorizontally && isOnLadder())
                     {
-                        this.motionY = 0.2D;
+                        FastLadder fastLadder = (FastLadder) Fraction.INSTANCE.getModuleManager().getModule(FastLadder.class);
+                        if (fastLadder.isEnabled()) {
+                            motionY = fastLadder.getSpeed();
+                        } else {
+                            motionY = 0.2D;
+                        }
                     }
 
-                    if (this.worldObj.isRemote && (!this.worldObj.isBlockLoaded(new BlockPos((int)this.posX, 0, (int)this.posZ)) || !this.worldObj.getChunkFromBlockCoords(new BlockPos((int)this.posX, 0, (int)this.posZ)).isLoaded()))
-                    {
-                        if (this.posY > 0.0D)
-                        {
-                            this.motionY = -0.1D;
-                        }
+                    if (worldObj.isRemote && (!worldObj.isBlockLoaded(new BlockPos((int)this.posX, 0, (int)this.posZ)) || !this.worldObj.getChunkFromBlockCoords(new BlockPos((int)this.posX, 0, (int)this.posZ)).isLoaded())) {
+                        if (posY > 0.0D)
+                            motionY = -0.1D;
                         else
-                        {
-                            this.motionY = 0.0D;
-                        }
-                    }
-                    else
-                    {
-                        this.motionY -= 0.08D;
+                            motionY = 0.0D;
+                    } else {
+                        motionY -= 0.08D;
                     }
 
-                    this.motionY *= 0.9800000190734863D;
-                    this.motionX *= (double)f4;
-                    this.motionZ *= (double)f4;
-                }
-                else
-                {
-                    double d1 = this.posY;
-                    this.moveFlying(strafe, forward, 0.02F);
-                    this.moveEntity(this.motionX, this.motionY, this.motionZ);
-                    this.motionX *= 0.5D;
-                    this.motionY *= 0.5D;
-                    this.motionZ *= 0.5D;
-                    this.motionY -= 0.02D;
+                    motionY *= 0.9800000190734863D;
+                    motionX *= f4;
+                    motionZ *= f4;
+                } else {
+                    double d1 = posY;
+                    moveFlying(strafe, forward, 0.02F);
+                    moveEntity(this.motionX, this.motionY, this.motionZ);
+                    motionX *= 0.5D;
+                    motionY *= 0.5D;
+                    motionZ *= 0.5D;
+                    motionY -= 0.02D;
 
-                    if (this.isCollidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + d1, this.motionZ))
-                    {
-                        this.motionY = 0.30000001192092896D;
+                    if (isCollidedHorizontally && isOffsetPositionInLiquid(motionX, motionY + 0.6000000238418579D - posY + d1, motionZ)) {
+                        motionY = 0.30000001192092896D;
                     }
                 }
             }
@@ -2042,7 +2041,7 @@ public abstract class EntityLivingBase extends Entity
             {
                 this.handleJumpLava();
             }
-            else if (this.onGround && this.jumpTicks == 0)
+            else if ((this.onGround || Fraction.INSTANCE.getModuleManager().getModule(AirJump.class).isEnabled()) && this.jumpTicks == 0)
             {
                 this.jump();
                 this.jumpTicks = 10;

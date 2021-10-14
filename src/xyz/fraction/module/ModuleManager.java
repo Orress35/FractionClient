@@ -1,9 +1,9 @@
 package xyz.fraction.module;
 
-import xyz.fraction.module.combat.Aura;
-import xyz.fraction.module.combat.NoSwing;
+import xyz.fraction.module.combat.*;
 import xyz.fraction.module.movement.*;
 import xyz.fraction.module.other.AntiFalse;
+import xyz.fraction.module.other.AntiHunger;
 import xyz.fraction.module.other.Derp;
 import xyz.fraction.module.render.ClickGUI;
 
@@ -15,18 +15,36 @@ public class ModuleManager {
 
     public ModuleManager() {
         /* COMBAT */
+        modules.add(new Aimbot());
         modules.add(new Aura());
+        modules.add(new Clicker());
+        modules.add(new HitBox());
         modules.add(new NoSwing());
+        modules.add(new Reach());
+        modules.add(new Triggerbot());
 
         /* MOVEMENT */
+        modules.add(new AirJump());
+        modules.add(new AutoWalk());
+        modules.add(new Eagle());
+        modules.add(new FastLadder());
         modules.add(new Fly());
         modules.add(new HighJump());
+        modules.add(new NoRotate());
         modules.add(new NoSlow());
+        modules.add(new ReverseStep());
+        modules.add(new Sneak());
         modules.add(new Speed());
+        modules.add(new Spider());
         modules.add(new Sprint());
+        modules.add(new Step());
+        modules.add(new Strafe());
+        modules.add(new Timer());
+        modules.add(new WallSpeed());
 
         /* OTHER */
         modules.add(new AntiFalse());
+        modules.add(new AntiHunger());
         modules.add(new Derp());
 
         /* RENDER */

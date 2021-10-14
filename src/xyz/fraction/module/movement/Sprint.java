@@ -16,7 +16,7 @@ public class Sprint extends Module {
 
     @Override
     public void onPre(PreMotionEvent e) {
-        setDisplayName(getName() + " &7[" + mode.get() + "]");
+        setDisplayName(getName() + " &7" + mode.get());
         if (mode.get().equals("Legit"))
             mc.gameSettings.keyBindSprint.setPressed(true);
         else

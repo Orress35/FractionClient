@@ -29,7 +29,7 @@ public class NoSlow extends Module {
 
     @Override
     public void onPre(PreMotionEvent e) {
-        setDisplayName(getName() + " &7[" + mode.get() + "]");
+        setDisplayName(getName() + " &7" + mode.get());
         if (mc.thePlayer.isBlocking() && mode.get().equals("Packet")) {
             if (stopwatch.elapsedNoReset(packetTimer.get()))
                 unblock();
@@ -38,7 +38,6 @@ public class NoSlow extends Module {
 
     @Override
     public void onPost() {
-        setDisplayName(getName() + " &7[" + mode.get() + "]");
         if (mc.thePlayer.isBlocking() && mode.get().equals("Packet")) {
             if (stopwatch.elapsed(packetTimer.get()))
                 block();

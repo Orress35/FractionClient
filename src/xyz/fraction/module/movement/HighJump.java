@@ -30,7 +30,7 @@ public class HighJump extends Module {
 
     @Override
     public void onPre(PreMotionEvent e) {
-        setDisplayName(getName() + " &7[" + mode.get() + "]");
+        setDisplayName(getName() + " &7" + mode.get());
 
         if (mc.thePlayer.onGround) {
             jumps = 0;
