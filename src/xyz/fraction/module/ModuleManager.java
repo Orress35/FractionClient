@@ -26,6 +26,7 @@ public class ModuleManager {
 
         /* MOVEMENT */
         modules.add(new AirJump());
+        modules.add(new AntiVoid());
         modules.add(new AutoWalk());
         modules.add(new Eagle());
         modules.add(new FastLadder());
