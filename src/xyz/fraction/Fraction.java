@@ -140,6 +140,6 @@ public enum Fraction {
     }
 
     public void send(String message) {
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(message.replace("&", "§")));
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(("&8[&aFraction&8] &7" + message).replace("&", "§")));
     }
 }

@@ -186,6 +186,7 @@ import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 import xyz.fraction.Fraction;
 import xyz.fraction.module.combat.NoSwing;
+import xyz.fraction.module.testing.ReachAlert;
 import xyz.fraction.ui.HUD;
 
 public class Minecraft implements IThreadListener, IPlayerUsage
@@ -1549,6 +1550,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage
                 switch (this.objectMouseOver.typeOfHit)
                 {
                     case ENTITY:
+                        double distance = this.thePlayer.getPositionEyes(1F).distanceTo(this.objectMouseOver.hitVec);
+                        if (distance > 3 && Fraction.INSTANCE.getModuleManager().getModule(ReachAlert.class).isEnabled())
+                            Fraction.INSTANCE.send("reach: &a" + distance);
                         this.playerController.attackEntity(this.thePlayer, this.objectMouseOver.entityHit);
                         break;
 

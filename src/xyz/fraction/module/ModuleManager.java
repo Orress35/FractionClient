@@ -6,6 +6,7 @@ import xyz.fraction.module.other.AntiFalse;
 import xyz.fraction.module.other.AntiHunger;
 import xyz.fraction.module.other.Derp;
 import xyz.fraction.module.render.ClickGUI;
+import xyz.fraction.module.testing.ReachAlert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,9 @@ public class ModuleManager {
 
         /* RENDER */
         modules.add(new ClickGUI());
+
+        /* TESTING */
+        modules.add(new ReachAlert());
     }
 
     public List<Module> getModules() {

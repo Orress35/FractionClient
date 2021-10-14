@@ -36,6 +36,8 @@ public class Module {
             category = Category.MOVEMENT;
         } else if (fullName.contains("render.")) {
             category = Category.RENDER;
+        } else if (fullName.contains("testing.")) {
+            category = Category.TESTING;
         } else {
             category = Category.OTHER;
         }
@@ -143,6 +145,6 @@ public class Module {
     }
 
     public void send(String message) {
-        mc.thePlayer.addChatMessage(new ChatComponentText(message.replace("&", "§")));
+        mc.thePlayer.addChatMessage(new ChatComponentText(("&8[&aFraction&8] &7" + message).replace("&", "§")));
     }
 }
