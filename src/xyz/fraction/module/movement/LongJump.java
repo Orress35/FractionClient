@@ -8,7 +8,7 @@ import xyz.fraction.util.MoveUtil;
 
 @ModuleInfo()
 public class LongJump extends Module {
-    private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {"NCP"});
+    private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {"AAC4.4.2", "NCP"});
 
     int airTicks = 0;
     int ticks = 0;
@@ -18,6 +18,12 @@ public class LongJump extends Module {
     public void onEnable() {
         ticks = 0;
         jumped = false;
+    }
+
+    @Override
+    public void onDisable() {
+        mc.thePlayer.speedInAir = 0.02F;
+        mc.timer.timerSpeed = 1F;
     }
 
     @Override
@@ -31,6 +37,19 @@ public class LongJump extends Module {
         }
 
         switch (mode.get()) {
+            case "AAC4.4.2":
+                if (airTicks > 0 && airTicks < 16) {
+                    mc.thePlayer.jumpMovementFactor *= 3.5F;
+                    mc.timer.timerSpeed = 0.5F;
+
+                    if (mc.thePlayer.motionY > 0)
+                        mc.thePlayer.motionY *= 1.02;
+                    else
+                        mc.thePlayer.motionY *= 0.98;
+                } else {
+                    mc.timer.timerSpeed = 0.25F;
+                }
+                break;
             case "NCP":
                 if (MoveUtil.isMoving() && mc.thePlayer.onGround) {
                     if (jumped) {
