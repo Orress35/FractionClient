@@ -2,6 +2,7 @@ package xyz.fraction.module;
 
 import xyz.fraction.module.combat.*;
 import xyz.fraction.module.movement.*;
+import xyz.fraction.module.other.Headless;
 import xyz.fraction.module.render.AntiBlind;
 import xyz.fraction.module.other.AntiFalse;
 import xyz.fraction.module.other.AntiHunger;
@@ -22,6 +23,8 @@ public class ModuleManager {
         modules.add(new Aura());
         modules.add(new Clicker());
         modules.add(new HitBox());
+        modules.add(new KeepSprint());
+        modules.add(new MoreKB());
         modules.add(new NoSwing());
         modules.add(new Reach());
         modules.add(new Triggerbot());
@@ -33,6 +36,7 @@ public class ModuleManager {
         modules.add(new Eagle());
         modules.add(new FastLadder());
         modules.add(new Fly());
+        modules.add(new Headless());
         modules.add(new HighJump());
         modules.add(new LongJump());
         modules.add(new NoRotate());

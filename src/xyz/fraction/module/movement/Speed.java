@@ -17,6 +17,11 @@ public class Speed extends Module {
     int airTicks = 0;
 
     @Override
+    public void onDisable() {
+        mc.timer.timerSpeed = 1F;
+    }
+
+    @Override
     public void onPre(PreMotionEvent e) {
         setDisplayName(getName() + " &7" + mode.get());
 
