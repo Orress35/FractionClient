@@ -30,6 +30,7 @@ public class ModuleManager {
         modules.add(new FastLadder());
         modules.add(new Fly());
         modules.add(new HighJump());
+        modules.add(new LongJump());
         modules.add(new NoRotate());
         modules.add(new NoSlow());
         modules.add(new ReverseStep());
