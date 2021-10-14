@@ -3478,7 +3478,7 @@ public class Shaders
                 setProgramUniform1i(uniform_isEyeInWater, isEyeInWater);
                 setProgramUniform1f(uniform_nightVision, nightVision);
                 setProgramUniform1f(uniform_blindness, blindness);
-                setProgramUniform1f(uniform_screenBrightness, mc.gameSettings.saturation);
+                setProgramUniform1f(uniform_screenBrightness, mc.gameSettings.gamma);
                 setProgramUniform1i(uniform_hideGUI, mc.gameSettings.thirdPersonView ? 1 : 0);
                 setProgramUniform1f(uniform_centerDepthSmooth, centerDepthSmooth);
                 setProgramUniform2i(uniform_atlasSize, atlasSizeX, atlasSizeY);

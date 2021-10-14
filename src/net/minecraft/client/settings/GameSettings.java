@@ -188,8 +188,8 @@ public class GameSettings
     public String smoothCamera;
     public boolean debugCamEnable;
     public boolean fovSetting;
-    public float gammaSetting;
-    public float saturation;
+    public float fov;
+    public float gamma;
 
     /** GUI scale */
     public float guiScale;
@@ -292,7 +292,7 @@ public class GameSettings
         this.mc = (KeyBinding[])((KeyBinding[])ArrayUtils.addAll(new KeyBinding[] {this.keyBindAttack, this.keyBindUse, this.keyBindForward, this.keyBindLeft, this.keyBindBack, this.keyBindRight, this.keyBindJump, this.keyBindSneak, this.keyBindSprint, this.keyBindDrop, this.keyBindInventory, this.keyBindPlayerList, this.keyBindCommand, this.keyBindPickItem, this.keyBindScreenshot, this.keyBindTogglePerspective, this.keyBindSmoothCamera, this.keyBindFullscreen, this.keyBindStreamPauseUnpause, this.keyBindStreamCommercials, this.keyBindStreamToggleMic, this.keyBindsHotbar, this.keyBindSpectatorOutlines, this.keyBindStreamStartStop}, this.keyBindings));
         this.hideGUI = EnumDifficulty.NORMAL;
         this.smoothCamera = "";
-        this.gammaSetting = 70.0F;
+        this.fov = 70.0F;
         this.forceUnicodeFont = "en_US";
         this.logger = false;
         this.difficulty = mcIn;
@@ -334,7 +334,7 @@ public class GameSettings
         this.mc = (KeyBinding[])((KeyBinding[])ArrayUtils.addAll(new KeyBinding[] {this.keyBindAttack, this.keyBindUse, this.keyBindForward, this.keyBindLeft, this.keyBindBack, this.keyBindRight, this.keyBindJump, this.keyBindSneak, this.keyBindSprint, this.keyBindDrop, this.keyBindInventory, this.keyBindPlayerList, this.keyBindCommand, this.keyBindPickItem, this.keyBindScreenshot, this.keyBindTogglePerspective, this.keyBindSmoothCamera, this.keyBindFullscreen, this.keyBindStreamPauseUnpause, this.keyBindStreamCommercials, this.keyBindStreamToggleMic, this.keyBindsHotbar, this.keyBindSpectatorOutlines, this.keyBindStreamStartStop}, this.keyBindings));
         this.hideGUI = EnumDifficulty.NORMAL;
         this.smoothCamera = "";
-        this.gammaSetting = 70.0F;
+        this.fov = 70.0F;
         this.forceUnicodeFont = "en_US";
         this.logger = false;
     }
@@ -388,12 +388,12 @@ public class GameSettings
 
         if (settingsOption == GameSettings.Options.FOV)
         {
-            this.gammaSetting = value;
+            this.fov = value;
         }
 
         if (settingsOption == GameSettings.Options.GAMMA)
         {
-            this.saturation = value;
+            this.gamma = value;
         }
 
         if (settingsOption == GameSettings.Options.FRAMERATE_LIMIT)
@@ -694,7 +694,7 @@ public class GameSettings
     public float getOptionFloatValue(GameSettings.Options settingOption)
     {
         float f = this.getOptionFloatValueOF(settingOption);
-        return f != Float.MAX_VALUE ? f : (settingOption == GameSettings.Options.FOV ? this.gammaSetting : (settingOption == GameSettings.Options.GAMMA ? this.saturation : (settingOption == GameSettings.Options.SATURATION ? this.guiScale : (settingOption == GameSettings.Options.SENSITIVITY ? this.mouseSensitivity : (settingOption == GameSettings.Options.CHAT_OPACITY ? this.chatOpacity : (settingOption == GameSettings.Options.CHAT_HEIGHT_FOCUSED ? this.chatHeightFocused : (settingOption == GameSettings.Options.CHAT_HEIGHT_UNFOCUSED ? this.chatHeightUnfocused : (settingOption == GameSettings.Options.CHAT_SCALE ? this.chatScale : (settingOption == GameSettings.Options.CHAT_WIDTH ? this.chatWidth : (settingOption == GameSettings.Options.FRAMERATE_LIMIT ? (float)this.limitFramerate : (settingOption == GameSettings.Options.MIPMAP_LEVELS ? (float)this.mipmapLevels : (settingOption == GameSettings.Options.RENDER_DISTANCE ? (float)this.renderDistanceChunks : (settingOption == GameSettings.Options.STREAM_BYTES_PER_PIXEL ? this.streamBytesPerPixel : (settingOption == GameSettings.Options.STREAM_VOLUME_MIC ? this.streamMicVolume : (settingOption == GameSettings.Options.STREAM_VOLUME_SYSTEM ? this.streamGameVolume : (settingOption == GameSettings.Options.STREAM_KBPS ? this.streamKbps : (settingOption == GameSettings.Options.STREAM_FPS ? this.streamFps : 0.0F)))))))))))))))));
+        return f != Float.MAX_VALUE ? f : (settingOption == GameSettings.Options.FOV ? this.fov : (settingOption == GameSettings.Options.GAMMA ? this.gamma : (settingOption == GameSettings.Options.SATURATION ? this.guiScale : (settingOption == GameSettings.Options.SENSITIVITY ? this.mouseSensitivity : (settingOption == GameSettings.Options.CHAT_OPACITY ? this.chatOpacity : (settingOption == GameSettings.Options.CHAT_HEIGHT_FOCUSED ? this.chatHeightFocused : (settingOption == GameSettings.Options.CHAT_HEIGHT_UNFOCUSED ? this.chatHeightUnfocused : (settingOption == GameSettings.Options.CHAT_SCALE ? this.chatScale : (settingOption == GameSettings.Options.CHAT_WIDTH ? this.chatWidth : (settingOption == GameSettings.Options.FRAMERATE_LIMIT ? (float)this.limitFramerate : (settingOption == GameSettings.Options.MIPMAP_LEVELS ? (float)this.mipmapLevels : (settingOption == GameSettings.Options.RENDER_DISTANCE ? (float)this.renderDistanceChunks : (settingOption == GameSettings.Options.STREAM_BYTES_PER_PIXEL ? this.streamBytesPerPixel : (settingOption == GameSettings.Options.STREAM_VOLUME_MIC ? this.streamMicVolume : (settingOption == GameSettings.Options.STREAM_VOLUME_SYSTEM ? this.streamGameVolume : (settingOption == GameSettings.Options.STREAM_KBPS ? this.streamKbps : (settingOption == GameSettings.Options.STREAM_FPS ? this.streamFps : 0.0F)))))))))))))))));
     }
 
     public boolean getOptionOrdinalValue(GameSettings.Options settingOption)
@@ -889,12 +889,12 @@ public class GameSettings
 
                             if (astring[0].equals("fov"))
                             {
-                                this.gammaSetting = this.parseFloat(astring[1]) * 40.0F + 70.0F;
+                                this.fov = this.parseFloat(astring[1]) * 40.0F + 70.0F;
                             }
 
                             if (astring[0].equals("gamma"))
                             {
-                                this.saturation = this.parseFloat(astring[1]);
+                                this.gamma = this.parseFloat(astring[1]);
                             }
 
                             if (astring[0].equals("saturation"))
@@ -1308,8 +1308,8 @@ public class GameSettings
             PrintWriter printwriter = new PrintWriter(new FileWriter(this.bc));
             printwriter.println("invertYMouse:" + this.invertMouse);
             printwriter.println("mouseSensitivity:" + this.mouseSensitivity);
-            printwriter.println("fov:" + (this.gammaSetting - 70.0F) / 40.0F);
-            printwriter.println("gamma:" + this.saturation);
+            printwriter.println("fov:" + (this.fov - 70.0F) / 40.0F);
+            printwriter.println("gamma:" + this.gamma);
             printwriter.println("saturation:" + this.guiScale);
             printwriter.println("renderDistance:" + this.renderDistanceChunks);
             printwriter.println("guiScale:" + this.particleSetting);
@@ -3173,8 +3173,8 @@ public class GameSettings
         this.fancyGraphics = true;
         this.ambientOcclusion = 2;
         this.clouds = 2;
-        this.gammaSetting = 70.0F;
-        this.saturation = 0.0F;
+        this.fov = 70.0F;
+        this.gamma = 0.0F;
         this.particleSetting = 0;
         this.language = 0;
         this.heldItemTooltips = true;

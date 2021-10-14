@@ -2,10 +2,12 @@ package xyz.fraction.module;
 
 import xyz.fraction.module.combat.*;
 import xyz.fraction.module.movement.*;
+import xyz.fraction.module.render.AntiBlind;
 import xyz.fraction.module.other.AntiFalse;
 import xyz.fraction.module.other.AntiHunger;
 import xyz.fraction.module.other.Derp;
 import xyz.fraction.module.render.ClickGUI;
+import xyz.fraction.module.render.FullBright;
 import xyz.fraction.module.testing.ReachAlert;
 
 import java.util.ArrayList;
@@ -51,7 +53,9 @@ public class ModuleManager {
         modules.add(new Derp());
 
         /* RENDER */
+        modules.add(new AntiBlind());
         modules.add(new ClickGUI());
+        modules.add(new FullBright());
 
         /* TESTING */
         modules.add(new ReachAlert());

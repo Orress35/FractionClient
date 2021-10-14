@@ -610,7 +610,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
 
             if (useFOVSetting)
             {
-                f = this.mc.gameSettings.gammaSetting;
+                f = this.mc.gameSettings.fov;
 
                 if (Config.isDynamicFov())
                 {
@@ -1183,7 +1183,7 @@ public class EntityRenderer implements IResourceManagerReloadListener
                         f10 = 1.0F;
                     }
 
-                    float f16 = this.mc.gameSettings.saturation;
+                    float f16 = this.mc.gameSettings.gamma;
                     float f17 = 1.0F - f8;
                     float f13 = 1.0F - f9;
                     float f14 = 1.0F - f10;
