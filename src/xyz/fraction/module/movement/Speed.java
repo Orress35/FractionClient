@@ -10,7 +10,7 @@ import xyz.fraction.util.MoveUtil;
 
 @ModuleInfo()
 public class Speed extends Module {
-    private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {"Vanilla", "ACR", "ACR Hop"});
+    private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {"Vanilla", "ACR", "ACR Hop", "NCP"});
     private final DoubleSetting vanillaSpeed = new DoubleSetting(this, "Vanilla Speed", 0.1, 2.5, 1.0);
     private final BooleanSetting vanillaJump = new BooleanSetting(this, "Vanilla Jump", false);
 
@@ -47,7 +47,15 @@ public class Speed extends Module {
                         motion = Math.hypot(mc.thePlayer.motionX, mc.thePlayer.motionZ) + 0.032F;
                     }
                 }
+                break;
+            case "NCP":
+                if (MoveUtil.isMoving() && e.isOnGround())
+                    mc.thePlayer.jump();
 
+                mc.thePlayer.jumpMovementFactor *= 1.025;
+                mc.timer.timerSpeed = 1.075F;
+
+                MoveUtil.strafe();
                 break;
         }
     }

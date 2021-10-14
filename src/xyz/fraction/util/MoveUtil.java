@@ -60,7 +60,9 @@ public class MoveUtil {
         if (!MoveUtil.isMoving())
             return;
 
-        mc.thePlayer.motionX = Math.cos(Math.toRadians(getInputYaw())) * Math.hypot(mc.thePlayer.motionX, mc.thePlayer.motionZ);
-        mc.thePlayer.motionZ = Math.sin(Math.toRadians(getInputYaw())) * Math.hypot(mc.thePlayer.motionX, mc.thePlayer.motionZ);
+        double motion = Math.hypot(mc.thePlayer.motionX, mc.thePlayer.motionZ);
+
+        mc.thePlayer.motionX = Math.cos(Math.toRadians(getInputYaw())) * motion;
+        mc.thePlayer.motionZ = Math.sin(Math.toRadians(getInputYaw())) * motion;
     }
 }
