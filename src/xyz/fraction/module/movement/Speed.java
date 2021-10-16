@@ -11,8 +11,8 @@ import xyz.fraction.util.MoveUtil;
 @ModuleInfo()
 public class Speed extends Module {
     private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {
-            "Vanilla", "ACR", "ACR Hop", "NCP", "Negativity", "Matrix", "Dev",
-            "JumpA", "JumpB", "JMF", "Timer"});
+            "Vanilla", "ACR", "ACR Hop", "NCP", "Negativity", "Matrix", "Dev"
+    });
     private final DoubleSetting vanillaSpeed = new DoubleSetting(this, "Vanilla Speed", 0.1, 2.5, 1.0);
     private final BooleanSetting vanillaJump = new BooleanSetting(this, "Vanilla Jump", false);
 
