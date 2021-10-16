@@ -48,12 +48,16 @@ public class EventHandler {
     }
 
     public void onSend(PacketEvent e) {
-        for (Module module: Fraction.INSTANCE.getModuleManager().getModules())
-            module.onSend(e);
+        for (Module module: Fraction.INSTANCE.getModuleManager().getModules()) {
+            if (module.isEnabled())
+                module.onSend(e);
+        }
     }
 
     public void onReceive(PacketEvent e) {
-        for (Module module: Fraction.INSTANCE.getModuleManager().getModules())
-            module.onReceive(e);
+        for (Module module: Fraction.INSTANCE.getModuleManager().getModules()) {
+            if (module.isEnabled())
+                module.onReceive(e);
+        }
     }
 }

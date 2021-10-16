@@ -61,7 +61,7 @@ public class LongJump extends Module {
                 }
 
                 if (airTicks == 1) {
-                    MoveUtil.strafe(Math.hypot(mc.thePlayer.motionX, mc.thePlayer.motionZ) * 4F);
+                    MoveUtil.strafe(Math.hypot(mc.thePlayer.motionX, mc.thePlayer.motionZ) * 3.75F);
                     jumped = true;
                 }
 

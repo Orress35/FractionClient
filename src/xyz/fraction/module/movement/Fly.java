@@ -11,8 +11,15 @@ import xyz.fraction.util.MoveUtil;
 
 @ModuleInfo()
 public class Fly extends Module {
-    private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {"Vanilla"});
+    private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {"Vanilla", "Negativity"});
     private final DoubleSetting vanillaSpeed = new DoubleSetting(this, "Vanilla Speed", 0.1, 2.5, 1.0);
+
+    int ticks = 0;
+
+    @Override
+    public void onEnable() {
+        ticks = 0;
+    }
 
     @Override
     public void onPre(PreMotionEvent e) {
@@ -28,6 +35,25 @@ public class Fly extends Module {
                     mc.thePlayer.motionY -= vanillaSpeed.get();
 
                 MoveUtil.strafe(vanillaSpeed.get());
+                break;
+            case "Negativity":
+                ticks++;
+
+                if (ticks == 1)
+                    e.setY(-5000);
+
+                if (ticks > 20)
+                    ticks = 0;
+
+                mc.thePlayer.motionY = 0;
+
+                if (mc.gameSettings.keyBindJump.isKeyDown())
+                    mc.thePlayer.motionY += 1;
+
+                if (mc.gameSettings.keyBindSneak.isKeyDown())
+                    mc.thePlayer.motionY -= 1;
+
+                MoveUtil.strafe(1);
                 break;
         }
     }

@@ -90,8 +90,6 @@ public enum Fraction {
 
                                 break;
                             }
-
-                            break;
                         }
                     }
                 }
@@ -193,15 +191,13 @@ public enum Fraction {
 
                                     break;
                                 }
-
-                                break;
                             }
                         }
                     }
 
                     br.close();
 
-                    send("loaded config with name " + args[2]);
+                    send("loaded config with name &a" + args[2]);
                 } catch (Exception ignored) { }
                 break;
             case "save":

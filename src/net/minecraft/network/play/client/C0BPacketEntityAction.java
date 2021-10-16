@@ -61,9 +61,17 @@ public class C0BPacketEntityAction implements Packet<INetHandlerPlayServer>
         return this.action;
     }
 
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
     public int getAuxData()
     {
         return this.auxData;
+    }
+
+    public void setAuxData(int auxData) {
+        this.auxData = auxData;
     }
 
     public static enum Action

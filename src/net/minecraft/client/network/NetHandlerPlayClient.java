@@ -211,6 +211,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.MapData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import xyz.fraction.Fraction;
+import xyz.fraction.module.movement.Speed;
 
 public class NetHandlerPlayClient implements INetHandlerPlayClient
 {
@@ -860,6 +862,12 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
         else
         {
             this.gameController.ingameGUI.getChatGUI().printChatMessage(packetIn.getChatComponent());
+        }
+
+        String message = packetIn.getChatComponent().getUnformattedText();
+
+        if (message.contains("failed") || message.contains("flagged")) {
+            ((Speed) Fraction.INSTANCE.getModuleManager().getModule(Speed.class)).fail();
         }
     }
 

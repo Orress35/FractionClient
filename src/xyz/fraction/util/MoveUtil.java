@@ -65,4 +65,11 @@ public class MoveUtil {
         mc.thePlayer.motionX = Math.cos(Math.toRadians(getInputYaw())) * motion;
         mc.thePlayer.motionZ = Math.sin(Math.toRadians(getInputYaw())) * motion;
     }
+
+    public static void hClip(double distance) {
+        if (!MoveUtil.isMoving())
+            return;
+
+        mc.thePlayer.setPosition(mc.thePlayer.posX + Math.cos(Math.toRadians(getInputYaw())) * distance, mc.thePlayer.posY, mc.thePlayer.posZ + Math.sin(Math.toRadians(getInputYaw())) * distance);
+    }
 }

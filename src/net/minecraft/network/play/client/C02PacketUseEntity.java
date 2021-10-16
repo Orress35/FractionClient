@@ -68,6 +68,10 @@ public class C02PacketUseEntity implements Packet<INetHandlerPlayServer>
         handler.processUseEntity(this);
     }
 
+    public void setEntityId(int entityId) {
+        this.entityId = entityId;
+    }
+
     public Entity getEntityFromWorld(World worldIn)
     {
         return worldIn.getEntityByID(this.entityId);

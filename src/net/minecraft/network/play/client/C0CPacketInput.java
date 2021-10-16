@@ -74,9 +74,17 @@ public class C0CPacketInput implements Packet<INetHandlerPlayServer>
         return this.strafeSpeed;
     }
 
+    public void setStrafeSpeed(float strafeSpeed) {
+        this.strafeSpeed = strafeSpeed;
+    }
+
     public float getForwardSpeed()
     {
         return this.forwardSpeed;
+    }
+
+    public void setForwardSpeed(float forwardSpeed) {
+        this.forwardSpeed = forwardSpeed;
     }
 
     public boolean isJumping()

@@ -2,13 +2,12 @@ package xyz.fraction.module;
 
 import xyz.fraction.module.combat.*;
 import xyz.fraction.module.movement.*;
-import xyz.fraction.module.other.Headless;
+import xyz.fraction.module.other.*;
 import xyz.fraction.module.render.AntiBlind;
-import xyz.fraction.module.other.AntiFalse;
-import xyz.fraction.module.other.AntiHunger;
-import xyz.fraction.module.other.Derp;
 import xyz.fraction.module.render.ClickGUI;
 import xyz.fraction.module.render.FullBright;
+import xyz.fraction.module.testing.PacketDuplicator;
+import xyz.fraction.module.testing.PacketEntropy;
 import xyz.fraction.module.testing.ReachAlert;
 
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ public class ModuleManager {
         modules.add(new Eagle());
         modules.add(new FastLadder());
         modules.add(new Fly());
-        modules.add(new Headless());
         modules.add(new HighJump());
         modules.add(new LongJump());
         modules.add(new NoRotate());
@@ -55,6 +53,8 @@ public class ModuleManager {
         modules.add(new AntiFalse());
         modules.add(new AntiHunger());
         modules.add(new Derp());
+        modules.add(new Headless());
+        modules.add(new PingSpoof());
 
         /* RENDER */
         modules.add(new AntiBlind());
@@ -62,6 +62,8 @@ public class ModuleManager {
         modules.add(new FullBright());
 
         /* TESTING */
+        modules.add(new PacketDuplicator());
+        modules.add(new PacketEntropy());
         modules.add(new ReachAlert());
     }
 

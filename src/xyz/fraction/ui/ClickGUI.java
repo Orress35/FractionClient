@@ -26,7 +26,7 @@ public class ClickGUI extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        panelX = -80;
+        panelX = -120;
 
         for (Category category: Category.values())
             renderPanel(category);
@@ -37,22 +37,22 @@ public class ClickGUI extends GuiScreen {
     }
 
     public void renderPanel(Category category) {
-        panelX += 120;
+        panelX += 180;
 
         List<Module> modules = Fraction.INSTANCE.getModuleManager().getCategory(category);
 
         FontRenderer fr = Fonts.fractionNormal;
 
-        drawRect(panelX - 10, 20, panelX + 80, 40, ColorUtil.getColor(255, 40, 40, 40));
-        fr.drawCenteredStringWithShadow(category.name(), (panelX - 10 + panelX + 80) / 2F, 25, ColorUtil.getColor(255, 200, 200, 200));
+        drawRect(panelX - 10, 20, panelX + 100, 40, ColorUtil.getColor(255, 40, 40, 40));
+        fr.drawCenteredStringWithShadow(category.name(), (panelX - 10 + panelX + 100) / 2F, 25, ColorUtil.getColor(255, 200, 200, 200));
 
         int y = 40;
         for (Module module: modules) {
-            drawRect(panelX - 8, y, panelX + 78, y + 20, ColorUtil.getColor(255, 50, 50, 50));
-            fr.drawCenteredStringWithShadow(module.getName(), (panelX - 8 + panelX + 78) / 2F, y + 5, module.isEnabled() ? ColorUtil.getColor(255, 120, 200, 120) : ColorUtil.getColor(255, 200, 200, 200));
+            drawRect(panelX - 8, y, panelX + 98, y + 20, ColorUtil.getColor(255, 50, 50, 50));
+            fr.drawCenteredStringWithShadow(module.getName(), (panelX - 8 + panelX + 98) / 2F, y + 5, module.isEnabled() ? ColorUtil.getColor(255, 120, 200, 120) : ColorUtil.getColor(255, 200, 200, 200));
 
             if (!module.getSettings().isEmpty())
-                fr.drawStringWithShadow("+", panelX + 70, y + 5, ColorUtil.getColor(255, 200, 200, 200));
+                fr.drawStringWithShadow("+", panelX + 90, y + 5, ColorUtil.getColor(255, 200, 200, 200));
 
             y += 20;
         }
@@ -118,7 +118,7 @@ public class ClickGUI extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (open == null) {
-            panelX = -80;
+            panelX = -120;
 
             for (Category category : Category.values())
                 clickPanel(category, mouseX, mouseY, mouseButton);
@@ -174,13 +174,13 @@ public class ClickGUI extends GuiScreen {
     }
 
     public void clickPanel(Category category, int mouseX, int mouseY, int mouseButton) {
-        panelX += 120;
+        panelX += 180;
 
         List<Module> modules = Fraction.INSTANCE.getModuleManager().getCategory(category);
 
         int y = 40;
         for (Module module: modules) {
-            if (mouseX > panelX - 8 && mouseX < panelX + 78 && mouseY > y && mouseY < y + 20) {
+            if (mouseX > panelX - 8 && mouseX < panelX + 98 && mouseY > y && mouseY < y + 20) {
                 if (mouseButton == 0)
                     module.toggle();
                 else

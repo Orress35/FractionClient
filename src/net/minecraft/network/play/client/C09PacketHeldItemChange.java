@@ -46,4 +46,8 @@ public class C09PacketHeldItemChange implements Packet<INetHandlerPlayServer>
     {
         return this.slotId;
     }
+
+    public void setSlotId(int slotId) {
+        this.slotId = slotId;
+    }
 }
