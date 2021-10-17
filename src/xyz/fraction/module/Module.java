@@ -2,9 +2,11 @@ package xyz.fraction.module;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
+import org.lwjgl.input.Keyboard;
 import xyz.fraction.event.impl.JumpEvent;
 import xyz.fraction.event.impl.PacketEvent;
 import xyz.fraction.event.impl.PreMotionEvent;
+import xyz.fraction.module.render.ClickGUI;
 import xyz.fraction.setting.Setting;
 import xyz.fraction.setting.impl.BooleanSetting;
 import xyz.fraction.setting.impl.DoubleSetting;
@@ -26,21 +28,19 @@ public class Module {
     private boolean enabled = false;
 
     public Module() {
-        this.key = this.getClass().getAnnotation(ModuleInfo.class).key();
         this.name = displayName = this.getClass().getSimpleName();
 
         String fullName = this.getClass().getName();
-        if (fullName.contains("combat.")) {
+        if (fullName.contains("combat."))
             category = Category.COMBAT;
-        } else if (fullName.contains("movement.")) {
+        else if (fullName.contains("movement."))
             category = Category.MOVEMENT;
-        } else if (fullName.contains("render.")) {
+        else if (fullName.contains("render."))
             category = Category.RENDER;
-        } else if (fullName.contains("testing.")) {
+        else if (fullName.contains("testing."))
             category = Category.TESTING;
-        } else {
+        else
             category = Category.OTHER;
-        }
     }
 
     public void load() {
@@ -134,6 +134,9 @@ public class Module {
 
     public void setKey(int key) {
         this.key = key;
+
+        if (this instanceof ClickGUI && this.key == 0)
+            this.key = Keyboard.KEY_RSHIFT;
     }
 
     public String getDisplayName() {
