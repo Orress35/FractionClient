@@ -48,7 +48,8 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 import xyz.fraction.Fraction;
 import xyz.fraction.event.impl.PreMotionEvent;
-import xyz.fraction.module.movement.NoSlow;
+import xyz.fraction.module.movement.simple.NoSlow;
+import xyz.fraction.module.movement.simple.Sprint;
 
 public class EntityPlayerSP extends AbstractClientPlayer
 {
@@ -828,27 +829,23 @@ public class EntityPlayerSP extends AbstractClientPlayer
         this.pushOutOfBlocks(this.posX + (double)this.width * 0.35D, this.getEntityBoundingBox().minY + 0.5D, this.posZ + (double)this.width * 0.35D);
         boolean flag3 = (float)this.getFoodStats().getFoodLevel() > 6.0F || this.capabilities.allowFlying;
 
-        if (this.onGround && !flag1 && !flag2 && this.movementInput.moveForward >= f && !this.isSprinting() && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness))
-        {
-            if (this.sprintToggleTimer <= 0 && !this.mc.gameSettings.keyBindSprint.isKeyDown())
-            {
-                this.sprintToggleTimer = 7;
+        if (!Fraction.INSTANCE.getModuleManager().getModule(Sprint.class).isEnabled()) {
+            if (this.onGround && !flag1 && !flag2 && this.movementInput.moveForward >= f && !this.isSprinting() && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness)) {
+                if (this.sprintToggleTimer <= 0 && !this.mc.gameSettings.keyBindSprint.isKeyDown()) {
+                    this.sprintToggleTimer = 7;
+                } else {
+                    this.setSprinting(true);
+                }
             }
-            else
-            {
+
+            NoSlow noSlow = (NoSlow) Fraction.INSTANCE.getModuleManager().getModule(NoSlow.class);
+            if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && (!this.isUsingItem() || (noSlow.isEnabled() && noSlow.canSprint())) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
                 this.setSprinting(true);
             }
-        }
 
-        NoSlow noSlow = (NoSlow) Fraction.INSTANCE.getModuleManager().getModule(NoSlow.class);
-        if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && (!this.isUsingItem() || (noSlow.isEnabled() && noSlow.canSprint())) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown())
-        {
-            this.setSprinting(true);
-        }
-
-        if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3))
-        {
-            this.setSprinting(false);
+            if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3)) {
+                this.setSprinting(false);
+            }
         }
 
         if (this.capabilities.allowFlying)

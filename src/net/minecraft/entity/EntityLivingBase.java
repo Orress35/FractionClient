@@ -53,8 +53,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import xyz.fraction.Fraction;
 import xyz.fraction.event.impl.JumpEvent;
-import xyz.fraction.module.movement.AirJump;
-import xyz.fraction.module.movement.FastLadder;
+import xyz.fraction.module.movement.simple.AirJump;
+import xyz.fraction.module.movement.simple.FastLadder;
+import xyz.fraction.module.movement.simple.Sprint;
+import xyz.fraction.util.MoveUtil;
 
 public abstract class EntityLivingBase extends Entity
 {
@@ -1406,7 +1408,7 @@ public abstract class EntityLivingBase extends Entity
      */
     protected void updateArmSwingProgress()
     {
-        int i = this.getArmSwingAnimationEnd();
+        int i = 10;
 
         if (this.isSwingInProgress)
         {
@@ -1585,11 +1587,16 @@ public abstract class EntityLivingBase extends Entity
         if (this.isPotionActive(Potion.jump))
             motionY += (float)(getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F;
 
-        if (this.isSprinting())
-        {
-            float f = this.rotationYaw * 0.017453292F;
-            motionX -= MathHelper.sin(f) * 0.2F;
-            motionZ += MathHelper.cos(f) * 0.2F;
+        if (this.isSprinting()) {
+            if (Sprint.isOmni()) {
+                float f = (MoveUtil.getInputYaw() - 90F) * 0.017453292F;
+                motionX -= MathHelper.sin(f) * 0.2F;
+                motionZ += MathHelper.cos(f) * 0.2F;
+            } else {
+                float f = this.rotationYaw * 0.017453292F;
+                motionX -= MathHelper.sin(f) * 0.2F;
+                motionZ += MathHelper.cos(f) * 0.2F;
+            }
         }
 
         isAirBorne = true;
@@ -1671,8 +1678,8 @@ public abstract class EntityLivingBase extends Entity
 
                         FastLadder fastLadder = (FastLadder) Fraction.INSTANCE.getModuleManager().getModule(FastLadder.class);
                         if (fastLadder.isEnabled()) {
-                            if (motionY < -fastLadder.getDownSpeed())
-                                motionY = -fastLadder.getDownSpeed();
+                            if (motionY < fastLadder.getDownSpeed())
+                                motionY = fastLadder.getDownSpeed();
                         } else if (motionY < -0.15D) {
                             motionY = -0.15D;
                         }

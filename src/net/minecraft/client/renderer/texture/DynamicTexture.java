@@ -16,9 +16,18 @@ public class DynamicTexture extends AbstractTexture
 
     public DynamicTexture(BufferedImage bufferedImage)
     {
-        this(bufferedImage.getWidth(), bufferedImage.getHeight());
-        bufferedImage.getRGB(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), this.dynamicTextureData, 0, bufferedImage.getWidth());
-        this.updateDynamicTexture();
+        if (bufferedImage != null) {
+            this.width = bufferedImage.getWidth();
+            this.height = bufferedImage.getHeight();
+            this.dynamicTextureData = new int[bufferedImage.getWidth() * bufferedImage.getHeight()];
+            TextureUtil.allocateTexture(this.getGlTextureId(), bufferedImage.getWidth(), bufferedImage.getHeight());
+            bufferedImage.getRGB(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), this.dynamicTextureData, 0, bufferedImage.getWidth());
+            this.updateDynamicTexture();
+        } else {
+            width = 0;
+            height = 0;
+            this.dynamicTextureData = new int[0];
+        }
     }
 
     public DynamicTexture(int textureWidth, int textureHeight)

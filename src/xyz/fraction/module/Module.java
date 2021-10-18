@@ -99,6 +99,7 @@ public class Module {
     public void onReceive(PacketEvent e) { }
     public void onJump(JumpEvent e) { }
     public void onRender() { }
+    public void onAttack() { }
 
     public void onKey(int key) {
         if (key == this.key)

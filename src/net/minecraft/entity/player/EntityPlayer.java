@@ -11,7 +11,6 @@ import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -47,7 +46,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.potion.Potion;
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
@@ -77,8 +75,7 @@ import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import xyz.fraction.Fraction;
-import xyz.fraction.module.combat.KeepSprint;
-import xyz.fraction.module.combat.MoreKB;
+import xyz.fraction.module.combat.simple.KeepSprint;
 
 @SuppressWarnings("incomplete-switch")
 public abstract class EntityPlayer extends EntityLivingBase
@@ -1309,7 +1306,7 @@ public abstract class EntityPlayer extends EntityLivingBase
      */
     public void attackTargetEntityWithCurrentItem(Entity targetEntity)
     {
-        ((MoreKB) Fraction.INSTANCE.getModuleManager().getModule(MoreKB.class)).attack();
+        Fraction.INSTANCE.getEventHandler().onAttack();
         if (targetEntity.canAttackWithItem())
         {
             if (!targetEntity.hitByEntity(this))

@@ -185,8 +185,7 @@ import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
 import xyz.fraction.Fraction;
-import xyz.fraction.module.combat.NoSwing;
-import xyz.fraction.module.testing.ReachAlert;
+import xyz.fraction.module.combat.simple.NoSwing;
 import xyz.fraction.ui.HUD;
 
 public class Minecraft implements IThreadListener, IPlayerUsage

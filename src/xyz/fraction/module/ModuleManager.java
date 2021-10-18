@@ -1,13 +1,15 @@
 package xyz.fraction.module;
 
-import xyz.fraction.module.combat.*;
-import xyz.fraction.module.movement.*;
+import xyz.fraction.module.combat.complex.aura.Aura;
+import xyz.fraction.module.combat.complex.clicker.Clicker;
+import xyz.fraction.module.combat.simple.*;
+import xyz.fraction.module.movement.complex.fly.Fly;
+import xyz.fraction.module.movement.complex.speed.Speed;
+import xyz.fraction.module.movement.simple.*;
 import xyz.fraction.module.other.*;
 import xyz.fraction.module.render.AntiBlind;
 import xyz.fraction.module.render.ClickGUI;
 import xyz.fraction.module.render.FullBright;
-import xyz.fraction.module.testing.PacketDuplicator;
-import xyz.fraction.module.testing.PacketEntropy;
 import xyz.fraction.module.testing.ReachAlert;
 
 import java.util.ArrayList;
@@ -18,43 +20,31 @@ public class ModuleManager {
 
     public ModuleManager() {
         /* COMBAT */
-        modules.add(new Aimbot());
         modules.add(new Aura());
         modules.add(new Clicker());
+        modules.add(new Criticals());
         modules.add(new HitBox());
         modules.add(new KeepSprint());
-        modules.add(new MoreKB());
         modules.add(new NoSwing());
         modules.add(new Reach());
-        modules.add(new Triggerbot());
 
         /* MOVEMENT */
         modules.add(new AirJump());
-        modules.add(new AntiVoid());
         modules.add(new AutoWalk());
         modules.add(new Eagle());
         modules.add(new FastLadder());
         modules.add(new Fly());
-        modules.add(new HighJump());
-        modules.add(new LongJump());
-        modules.add(new NoRotate());
         modules.add(new NoSlow());
-        modules.add(new ReverseStep());
-        modules.add(new Sneak());
         modules.add(new Speed());
-        modules.add(new Spider());
         modules.add(new Sprint());
-        modules.add(new Step());
-        modules.add(new Strafe());
-        modules.add(new Timer());
-        modules.add(new WallSpeed());
 
         /* OTHER */
         modules.add(new AntiFalse());
         modules.add(new AntiHunger());
-        modules.add(new Derp());
+        modules.add(new Disabler());
         modules.add(new Headless());
         modules.add(new PingSpoof());
+        modules.add(new Timer());
 
         /* RENDER */
         modules.add(new AntiBlind());
@@ -62,8 +52,6 @@ public class ModuleManager {
         modules.add(new FullBright());
 
         /* TESTING */
-        modules.add(new PacketDuplicator());
-        modules.add(new PacketEntropy());
         modules.add(new ReachAlert());
     }
 

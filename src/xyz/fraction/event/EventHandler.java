@@ -5,6 +5,7 @@ import xyz.fraction.event.impl.JumpEvent;
 import xyz.fraction.event.impl.PacketEvent;
 import xyz.fraction.event.impl.PreMotionEvent;
 import xyz.fraction.module.Module;
+import xyz.fraction.util.SilentRotations;
 
 public class EventHandler {
     public void onPre(PreMotionEvent e) {
@@ -12,6 +13,8 @@ public class EventHandler {
             if (module.isEnabled())
                 module.onPre(e);
         }
+
+        SilentRotations.onPre(e);
     }
 
     public void onJump(JumpEvent e) {
@@ -25,6 +28,13 @@ public class EventHandler {
         for (Module module: Fraction.INSTANCE.getModuleManager().getModules()) {
             if (module.isEnabled())
                 module.onRender();
+        }
+    }
+
+    public void onAttack() {
+        for (Module module: Fraction.INSTANCE.getModuleManager().getModules()) {
+            if (module.isEnabled())
+                module.onAttack();
         }
     }
 

@@ -242,4 +242,8 @@ public enum Fraction {
                 break;
         }
     }
+
+    public void flag(String message) {
+        
+    }
 }

@@ -212,7 +212,6 @@ import net.minecraft.world.storage.MapData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.fraction.Fraction;
-import xyz.fraction.module.movement.Speed;
 
 public class NetHandlerPlayClient implements INetHandlerPlayClient
 {
@@ -867,7 +866,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
         String message = packetIn.getChatComponent().getUnformattedText();
 
         if (message.contains("failed") || message.contains("flagged")) {
-            ((Speed) Fraction.INSTANCE.getModuleManager().getModule(Speed.class)).fail();
+            Fraction.INSTANCE.flag(message);
         }
     }
 

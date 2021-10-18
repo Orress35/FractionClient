@@ -21,6 +21,8 @@ public class HUD extends GuiIngame {
     public void renderGameOverlay(float partialTicks) {
         super.renderGameOverlay(partialTicks);
 
+        Fraction.INSTANCE.getEventHandler().onRender();
+
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
         FontRenderer fr = Fonts.fractionNormal;
         List<Module> modules = new ArrayList<>();

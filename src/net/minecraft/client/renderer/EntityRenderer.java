@@ -97,8 +97,8 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 import xyz.fraction.Fraction;
-import xyz.fraction.module.combat.HitBox;
-import xyz.fraction.module.combat.Reach;
+import xyz.fraction.module.combat.simple.HitBox;
+import xyz.fraction.module.combat.simple.Reach;
 
 public class EntityRenderer implements IResourceManagerReloadListener
 {
@@ -528,16 +528,16 @@ public class EntityRenderer implements IResourceManagerReloadListener
                         boolean flag1 = false;
 
                         if (Reflector.ForgeEntity_canRiderInteract.exists()) {
-                            flag1 = Reflector.callBoolean((Entity) value, Reflector.ForgeEntity_canRiderInteract, new Object[0]);
+                            flag1 = Reflector.callBoolean(value, Reflector.ForgeEntity_canRiderInteract);
                         }
 
-                        if (!flag1 && (Entity) value == entity.ridingEntity) {
+                        if (!flag1 && value == entity.ridingEntity) {
                             if (hitDistance2 == 0.0D) {
-                                this.pointedEntity = (Entity) value;
+                                this.pointedEntity = value;
                                 vec33 = movingobjectposition.hitVec;
                             }
                         } else {
-                            this.pointedEntity = (Entity) value;
+                            this.pointedEntity = value;
                             vec33 = movingobjectposition.hitVec;
                             hitDistance2 = d3;
                         }
