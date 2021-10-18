@@ -6,9 +6,9 @@ import xyz.fraction.module.movement.complex.speed.impl.*;
 import xyz.fraction.setting.impl.ModeSetting;
 
 public class Speed extends Module {
-    private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {"Dev", "Vanilla", "VanillaHop", "NCP", "Negativity"});
+    private final ModeSetting mode = new ModeSetting(this, "Mode", new String[] {"Dev", "Vanilla", "VanillaHop", "ACR", "NCP", "Negativity"});
 
-    SpeedBase dev = new SpeedDev(), vanilla = new SpeedVanilla(), vanillaHop = new SpeedVanillaHop(), ncp = new SpeedNCP(), negativity = new SpeedNegativity();
+    SpeedBase dev = new SpeedDev(), vanilla = new SpeedVanilla(), vanillaHop = new SpeedVanillaHop(), acr = new SpeedACR(), ncp = new SpeedNCP(), negativity = new SpeedNegativity();
 
     @Override
     public void onDisable() {
@@ -34,6 +34,8 @@ public class Speed extends Module {
                 return vanilla;
             case "VanillaHop":
                 return vanillaHop;
+            case "ACR":
+                return acr;
             case "NCP":
                 return ncp;
             case "Negativity":
