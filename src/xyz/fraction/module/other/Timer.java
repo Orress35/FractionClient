@@ -16,6 +16,6 @@ public class Timer extends Module {
 
     @Override
     public void onPre(PreMotionEvent e) {
-        mc.timer.timerSpeed = skipTick.get() ? (mc.thePlayer.ticksExisted % 2 == 0 ? timer.floatValue() : 1F) : 1F;
+        mc.timer.timerSpeed = skipTick.get() ? (mc.thePlayer.ticksExisted % 2 == 0 ? timer.floatValue() : 1F) : timer.floatValue();
     }
 }
