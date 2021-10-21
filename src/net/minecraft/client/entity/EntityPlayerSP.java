@@ -802,15 +802,15 @@ public class EntityPlayerSP extends AbstractClientPlayer
             --this.timeUntilPortal;
         }
 
-        boolean flag = this.movementInput.jump;
-        boolean flag1 = this.movementInput.sneak;
-        float f = 0.8F;
-        boolean flag2 = this.movementInput.moveForward >= f;
+        Sprint sprint = (Sprint) Fraction.INSTANCE.getModuleManager().getModule(Sprint.class);
+        NoSlow noSlow = (NoSlow) Fraction.INSTANCE.getModuleManager().getModule(NoSlow.class);
+
+        boolean jumping = this.movementInput.jump;
+        float minForward = (sprint.getSneaking() && this.movementInput.sneak) || (sprint.getUsingItem() && this.isUsingItem()) ? 0.1F : 0.8F;
+        boolean preForward = this.movementInput.moveForward >= minForward || sprint.getMode().equals("Basic");
         this.movementInput.updatePlayerMoveState();
 
-        if (this.isUsingItem() && !this.isRiding())
-        {
-            NoSlow noSlow = (NoSlow) Fraction.INSTANCE.getModuleManager().getModule(NoSlow.class);
+        if (this.isUsingItem() && !this.isRiding()) {
             if (noSlow.isEnabled()) {
                 this.movementInput.moveStrafe *= noSlow.getMultiplier();
                 this.movementInput.moveForward *= noSlow.getMultiplier();
@@ -827,25 +827,28 @@ public class EntityPlayerSP extends AbstractClientPlayer
         this.pushOutOfBlocks(this.posX - (double)this.width * 0.35D, this.getEntityBoundingBox().minY + 0.5D, this.posZ - (double)this.width * 0.35D);
         this.pushOutOfBlocks(this.posX + (double)this.width * 0.35D, this.getEntityBoundingBox().minY + 0.5D, this.posZ - (double)this.width * 0.35D);
         this.pushOutOfBlocks(this.posX + (double)this.width * 0.35D, this.getEntityBoundingBox().minY + 0.5D, this.posZ + (double)this.width * 0.35D);
-        boolean flag3 = (float)this.getFoodStats().getFoodLevel() > 6.0F || this.capabilities.allowFlying;
 
-        if (!Fraction.INSTANCE.getModuleManager().getModule(Sprint.class).isEnabled()) {
-            if (this.onGround && !flag1 && !flag2 && this.movementInput.moveForward >= f && !this.isSprinting() && flag3 && !this.isUsingItem() && !this.isPotionActive(Potion.blindness)) {
-                if (this.sprintToggleTimer <= 0 && !this.mc.gameSettings.keyBindSprint.isKeyDown()) {
-                    this.sprintToggleTimer = 7;
-                } else {
-                    this.setSprinting(true);
-                }
-            }
+        boolean hasFood = (float) this.getFoodStats().getFoodLevel() > 6.0F || this.capabilities.allowFlying || sprint.getHunger();
+        boolean forward = sprint.getMode().equals("Basic") || this.movementInput.moveForward >= minForward;
+        boolean collided = !sprint.getCollision() && mc.thePlayer.isCollidedHorizontally;
+        boolean usingItem = !sprint.getUsingItem() && !noSlow.canSprint() && this.isUsingItem();
+        boolean sneaking = !sprint.getSneaking() && this.movementInput.sneak;
+        boolean blindness = !sprint.getBlindness() && this.isPotionActive(Potion.blindness);
 
-            NoSlow noSlow = (NoSlow) Fraction.INSTANCE.getModuleManager().getModule(NoSlow.class);
-            if (!this.isSprinting() && this.movementInput.moveForward >= f && flag3 && (!this.isUsingItem() || (noSlow.isEnabled() && noSlow.canSprint())) && !this.isPotionActive(Potion.blindness) && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
+        if (this.onGround && !sneaking && !preForward && forward && !this.isSprinting() && hasFood && !usingItem && !blindness) {
+            if (this.sprintToggleTimer <= 0 && !this.mc.gameSettings.keyBindSprint.isKeyDown()) {
+                this.sprintToggleTimer = 7;
+            } else {
                 this.setSprinting(true);
             }
+        }
 
-            if (this.isSprinting() && (this.movementInput.moveForward < f || this.isCollidedHorizontally || !flag3)) {
-                this.setSprinting(false);
-            }
+        if (!this.isSprinting() && forward && hasFood && !usingItem && !blindness && this.mc.gameSettings.keyBindSprint.isKeyDown()) {
+            this.setSprinting(true);
+        }
+
+        if (this.isSprinting() && (!forward || collided || !hasFood)) {
+            this.setSprinting(false);
         }
 
         if (this.capabilities.allowFlying)
@@ -858,7 +861,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
                     this.sendPlayerAbilities();
                 }
             }
-            else if (!flag && this.movementInput.jump)
+            else if (!jumping && this.movementInput.jump)
             {
                 if (this.flyToggleTimer == 0)
                 {
@@ -898,17 +901,17 @@ public class EntityPlayerSP extends AbstractClientPlayer
                 }
             }
 
-            if (flag && !this.movementInput.jump)
+            if (jumping && !this.movementInput.jump)
             {
                 this.horseJumpPowerCounter = -10;
                 this.sendHorseJump();
             }
-            else if (!flag && this.movementInput.jump)
+            else if (!jumping && this.movementInput.jump)
             {
                 this.horseJumpPowerCounter = 0;
                 this.horseJumpPower = 0.0F;
             }
-            else if (flag)
+            else if (jumping)
             {
                 ++this.horseJumpPowerCounter;
 

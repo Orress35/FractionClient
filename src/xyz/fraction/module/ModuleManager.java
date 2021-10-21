@@ -10,6 +10,7 @@ import xyz.fraction.module.other.*;
 import xyz.fraction.module.render.AntiBlind;
 import xyz.fraction.module.render.ClickGUI;
 import xyz.fraction.module.render.FullBright;
+import xyz.fraction.module.testing.HitBoxAlert;
 import xyz.fraction.module.testing.ReachAlert;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class ModuleManager {
         modules.add(new KeepSprint());
         modules.add(new NoSwing());
         modules.add(new Reach());
+        modules.add(new Velocity());
 
         /* MOVEMENT */
         modules.add(new AirJump());
@@ -41,8 +43,10 @@ public class ModuleManager {
         /* OTHER */
         modules.add(new AntiFalse());
         modules.add(new AntiHunger());
+        modules.add(new Derp());
         modules.add(new Disabler());
         modules.add(new Headless());
+        modules.add(new NoFall());
         modules.add(new PingSpoof());
         modules.add(new Timer());
 
@@ -52,6 +56,7 @@ public class ModuleManager {
         modules.add(new FullBright());
 
         /* TESTING */
+        modules.add(new HitBoxAlert());
         modules.add(new ReachAlert());
     }
 

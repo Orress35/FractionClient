@@ -152,9 +152,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet>
         if (this.channel.isOpen()) {
             try {
                 PacketEvent e = new PacketEvent(p_channelRead0_2_);
+                Fraction.INSTANCE.getEventHandler().onReceive(e);
+
                 if (e.isCancelled())
                     return;
-                Fraction.INSTANCE.getEventHandler().onReceive(e);
 
                 p_channelRead0_2_.processPacket(this.packetListener);
             } catch (ThreadQuickExitException ignored) { }

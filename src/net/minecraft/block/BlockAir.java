@@ -10,6 +10,8 @@ import net.minecraft.world.World;
 
 public class BlockAir extends Block
 {
+    public static boolean solid = false;
+    public static int solidY = 0;
     private static Map mapOriginalOpacity = new IdentityHashMap();
 
     protected BlockAir()
@@ -27,7 +29,7 @@ public class BlockAir extends Block
 
     public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos, IBlockState state)
     {
-        return null;
+        return solid && pos.getY() == solidY ? new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1) : null;
     }
 
     /**

@@ -169,7 +169,7 @@ public enum Fraction {
                             Module module = moduleManager.getModule(name);
                             boolean enabled = Boolean.parseBoolean(line.split(",")[1]);
 
-                            if (enabled)
+                            if (enabled != module.isEnabled())
                                 module.toggle();
                         } else {
                             String name = line.split(":")[0];

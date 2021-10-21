@@ -1,5 +1,7 @@
 package net.minecraft.client.multiplayer;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -21,15 +23,16 @@ import net.minecraft.network.play.client.C0EPacketClickWindow;
 import net.minecraft.network.play.client.C10PacketCreativeInventoryAction;
 import net.minecraft.network.play.client.C11PacketEnchantItem;
 import net.minecraft.stats.StatFileWriter;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
+import net.optifine.reflect.Reflector;
 import xyz.fraction.Fraction;
+import xyz.fraction.module.testing.HitBoxAlert;
 import xyz.fraction.module.testing.ReachAlert;
+import xyz.fraction.util.SilentRotations;
+
+import java.util.List;
 
 public class PlayerControllerMP
 {
@@ -496,10 +499,50 @@ public class PlayerControllerMP
      */
     public void attackEntity(EntityPlayer playerIn, Entity targetEntity)
     {
-        if (targetEntity == mc.objectMouseOver.entityHit) {
-            double distance = mc.thePlayer.getPositionEyes(1F).distanceTo(mc.objectMouseOver.hitVec);
-            if (distance > 3 && Fraction.INSTANCE.getModuleManager().getModule(ReachAlert.class).isEnabled())
-                Fraction.INSTANCE.send("reach: &a" + distance);
+        if (Fraction.INSTANCE.getModuleManager().getModule(ReachAlert.class).isEnabled() || Fraction.INSTANCE.getModuleManager().getModule(HitBoxAlert.class).isEnabled()) {
+            Vec3 eyePosition = mc.thePlayer.getPositionEyes(1F);
+
+            Vec3 lookVector = mc.thePlayer.getVectorForRotation(SilentRotations.getPitch(), SilentRotations.getYaw());
+            Vec3 lookVectorEnd = eyePosition.addVector(lookVector.xCoord * 6F, lookVector.yCoord * 6F, lookVector.zCoord * 6F);
+
+            float size = targetEntity.getCollisionBorderSize();
+            AxisAlignedBB boundingbox = targetEntity.getEntityBoundingBox().expand(size, size, size);
+            MovingObjectPosition movingobjectposition = boundingbox.calculateIntercept(eyePosition, lookVectorEnd);
+
+            if (!boundingbox.isVecInside(eyePosition)) {
+                if (movingobjectposition != null) {
+                    double distance = eyePosition.distanceTo(movingobjectposition.hitVec);
+                    if (distance > 3 && Fraction.INSTANCE.getModuleManager().getModule(ReachAlert.class).isEnabled())
+                        Fraction.INSTANCE.send(String.format("reach: &a%.5f &7(&a1&7)", distance));
+                } else {
+                    if (Fraction.INSTANCE.getModuleManager().getModule(ReachAlert.class).isEnabled()) {
+                        double diffX = targetEntity.posX - mc.thePlayer.posX;
+                        double diffY = targetEntity.posY - mc.thePlayer.posY - mc.thePlayer.getEyeHeight() + targetEntity.getEyeHeight();
+                        double diffZ = targetEntity.posZ - mc.thePlayer.posZ;
+
+                        double dist = MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ);
+                        float yaw = (float)(Math.atan2(diffZ, diffX) * 180D / Math.PI) - 90F;
+                        float pitch = (float)-(Math.atan2(diffY, dist) * 180D / Math.PI);
+
+                        lookVector = mc.thePlayer.getVectorForRotation(pitch, yaw);
+                        lookVectorEnd = eyePosition.addVector(lookVector.xCoord * 6F, lookVector.yCoord * 6F, lookVector.zCoord * 6F);
+
+                        size = targetEntity.getCollisionBorderSize();
+                        boundingbox = targetEntity.getEntityBoundingBox().expand(size, size, size);
+                        movingobjectposition = boundingbox.calculateIntercept(eyePosition, lookVectorEnd);
+
+                        if (!boundingbox.isVecInside(eyePosition) && movingobjectposition != null) {
+                            double distance = eyePosition.distanceTo(movingobjectposition.hitVec);
+                            if (distance > 3 && Fraction.INSTANCE.getModuleManager().getModule(ReachAlert.class).isEnabled())
+                                Fraction.INSTANCE.send(String.format("reach: &a%.5f &7(&a0&7)", distance));
+                        }
+                    }
+
+                    if (Fraction.INSTANCE.getModuleManager().getModule(HitBoxAlert.class).isEnabled()) {
+                        Fraction.INSTANCE.send("out of bounding box (&a" + mc.thePlayer.ticksExisted % 250 + "&7)");
+                    }
+                }
+            }
         }
 
         this.syncCurrentPlayItem();

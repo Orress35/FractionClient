@@ -5,6 +5,7 @@ import xyz.fraction.Fraction;
 import xyz.fraction.event.impl.PreMotionEvent;
 import xyz.fraction.module.Module;
 import xyz.fraction.setting.impl.BooleanSetting;
+import xyz.fraction.setting.impl.DoubleSetting;
 import xyz.fraction.setting.impl.ModeSetting;
 import xyz.fraction.util.MoveUtil;
 
@@ -16,6 +17,7 @@ public class Sprint extends Module {
     private final BooleanSetting collision = new BooleanSetting(this, "Collision", false);
     private final BooleanSetting hunger = new BooleanSetting(this, "Hunger", false);
     private final BooleanSetting gui = new BooleanSetting(this, "GUI", false);
+    private final BooleanSetting sneaking = new BooleanSetting(this, "Sneaking", false);
 
     private static boolean omni = false;
 
@@ -36,5 +38,41 @@ public class Sprint extends Module {
 
     public static boolean isOmni() {
         return omni && Fraction.INSTANCE.getModuleManager().getModule(Sprint.class).isEnabled();
+    }
+
+    public String getMode() {
+        if (!isEnabled())
+            return "Legit";
+        return mode.get();
+    }
+
+    public boolean getUsingItem() {
+        if (!isEnabled())
+            return false;
+        return usingItem.get();
+    }
+
+    public boolean getBlindness() {
+        if (!isEnabled())
+            return false;
+        return blindness.get();
+    }
+
+    public boolean getCollision() {
+        if (!isEnabled())
+            return false;
+        return collision.get();
+    }
+
+    public boolean getHunger() {
+        if (!isEnabled())
+            return false;
+        return hunger.get();
+    }
+
+    public boolean getSneaking() {
+        if (!isEnabled())
+            return false;
+        return sneaking.get();
     }
 }

@@ -10,6 +10,10 @@ public abstract class FlyBase {
     public void onPre(PreMotionEvent e) {}
     public void onPost() {}
 
+    public void bobbing() {
+        mc.thePlayer.cameraYaw += 0.25;
+    }
+
     public Fly getFly() {
         return (Fly) Fraction.INSTANCE.getModuleManager().getModule(Fly.class);
     }
